@@ -5,7 +5,6 @@
   "dependencies" : {
 	  "underscore" : "1.5.x",
 	  "express" : "3.4.x",
-	  "wrench" : "1.5.x",
 	  "d3" : "3.3.x",
     "flatiron" :  "0.1.x",
     "optimist" :  "0.2.x"
