@@ -1,6 +1,6 @@
 {
-  "name": "http-server",
-  "version": "0.1.0",
+  "name": "visualizer",
+  "version": "0.0.1",
   "author": "blui",
   "dependencies" : {
 	  "underscore" : "1.5.x",
