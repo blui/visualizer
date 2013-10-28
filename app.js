@@ -5,8 +5,10 @@
 
 var express = require('express');
 var app = express();
+var wrench = require('wrench');
+util = require('util');
 
-app.get('/hello.txt', function(req, res){
+app.get('/', function(req, res){
 	res.send('Hello World');
 });
 
