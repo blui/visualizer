@@ -1,10 +1,17 @@
 
 /**
+ * Class: inputReader.js (formally app.js)
+ * Authors: Brian Lui, Miki Gataric
+ * Description: Assigns directory manually and reads all files under directory. Prints out results on localhost.
+ */
+
+
+/**
  * Module dependencies.
  */
 
 var express = require('express');
-var app = express();
+var inputReader = express();
 var wrench = require('wrench'), util = require('util'), fs = require('fs');
 
 /**
@@ -34,31 +41,12 @@ fs.readdir(dir, function(err, files) {
 /*
  * Function from express framework to pump out contents stored in 'data'
  */
-app.get('/', function(req, res){
+inputReader.get('/', function(req, res){
 	res.send(data);
 });
 
-// wrench.readdirSyncRecursive('routes');
-
-// var f = new wrench.LineReader('*');
-// while(f.hasNextLine()) {
-   // util.puts(f.getNextLine());
-// }
-
-// var files = [];
-// wrench.readdirRecursive('routes', function(error, curFiles) {
-	// util.puts(curFiles);
-// });
-
-
-	// for (var i = 0; i<curFiles.length; i++)
-	// {
-		// var f = new wrench.LineReader(curFiles[i].toString());		
-		// while(f.hasNextLine()) 
-		// {
-			// util.puts(f.getNextLine());
-		// }
-	// }
-				
-app.listen(3000);
+/*
+ * Call to create a server on local host
+ */
+inputReader.listen(3000);
 console.log('Listening on port 3000');
