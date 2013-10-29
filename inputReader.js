@@ -11,7 +11,7 @@
  */
 
 var express = require('express');
-var inputReader = express();
+var app = express();
 var wrench = require('wrench'), util = require('util'), fs = require('fs');
 
 /**
@@ -41,12 +41,12 @@ fs.readdir(dir, function(err, files) {
 /*
  * Function from express framework to pump out contents stored in 'data'
  */
-inputReader.get('/', function(req, res){
+app.get('/', function(req, res){
 	res.send(data);
 });
 
 /*
  * Call to create a server on local host
  */
-inputReader.listen(3000);
+app.listen(3000);
 console.log('Listening on port 3000');
