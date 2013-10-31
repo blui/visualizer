@@ -1,4 +1,4 @@
-var walk    = require('walk'), fs = require('fs'), filter;
+var walk    = require('walk'), filter;
 var files   = [];
 var counter = 0;
 var i = 0;
@@ -8,13 +8,21 @@ var filter = {
 	filters: ['lib']
   };
 
-var walker  = walk.walk('./jitsi-master', filter);
+var walker  = walk.walk('node_modules', filter);
 
 walker.on('file', function(root, stat, next) {
-    files.push(root + '/' + stat.name);
-	console.log(files[i]);
-	next();
-	i++;
-	counter++;
-	console.log('The total number of files is: ' + counter + " and the number of items in the array is: " + files.length)
+	files.push(stat.name);
+	if (files[i] == 'view.js')
+	{
+		console.log(files[i]);
+		next();
+		i++;
+		counter++;
+	}
+	else
+	{
+		next();
+		i++;
+	}
+	console.log('Number of matching files: ' + counter + " and number of items in the array: " + files.length)
 });
