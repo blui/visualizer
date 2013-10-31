@@ -1,20 +1,18 @@
- 
-/**
- * API dependencies
- */
-var express = require('express');
-var app = express();
-fs = require('fs');
 
-/**
- * Module dependencies
- */
+// Declare node.js module dependencies from API
+var express = require('express'), 
+	fs = require('fs');
+
+// Declare module dependencies
 var inputReader = require('./inputReader.js');
-var data = inputReader.contentsOfFile();
-console.log(data.toString());
 
-/*
- * Set up localhost with port 3000
- */
-//app.listen(3000);
-//console.log('Listening on port 3000');	//Notify on runtime which port is used
+// Create a new application app with express()
+var app = express();
+
+app.get('/inputReader', function(req, res){
+  res.send(inputReader.fileRead());
+});
+
+// Bind and listen to connections
+app.listen(3000);
+console.log('Listening on port 3000');	//Notify on runtime which port is used
