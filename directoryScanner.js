@@ -8,7 +8,7 @@ var filter = {
 	filters: ['lib']
   };
 
-var walker  = walk.walk('node_modules', filter);
+var walker  = walk.walkSync('node_modules', filter);
 
 walker.on('file', function(root, stat, next) {
 	files.push(stat.name);
