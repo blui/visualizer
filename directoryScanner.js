@@ -1,34 +1,44 @@
 
+/* 
+	Module: directoryScanner.js
+	Description: Basic directory reader returns string of contents of a directory from a set directory name
+	Needs to be done: Add key listener to allow for a dynamic directory name
+					  Add filters to be able to scan directorys selectively; ex. dir #1, dir #3 but not dir #2
+ */
 
 // Declare node.js module dependencies from API
 var walk = require('walk'), 
+	fs = require('fs'), 
 	filter;
-	
-// Declare variables	
-var files = [], 
-	var filteredfiles = [], 
-	var i = 0, 
-	var fileextension = '.html', 
-	var foldername = 'node_modules';
-var filter = {
-	followLinks: false,
-};
-var walker = walk.walkSync(foldername, filter);
 
-module.exports = {
-	walker.on('file', function(root, stat, next) {
-		files.push(stat.name);
-		if (files[i].indexOf(fileextension) != -1) { 
-			filteredfiles.push(stat.name);
+// Declare variables	
+var files = []; 
+var i = 0;
+var foldername = 'views';
+var filter = {
+	followLinks: false
+};
+var walker = walk.walkSync(foldername, filter);	
+
+// Try to avoid using 'walk'
+/* module.exports = {
+	scanDir: function () {
+		var text =  walker.on('file', function(root, stat, next) {
+			files.push(stat.name);
+			filteredFiles.push(stat.name);
 			console.log(files[i]);
 			next();
 			i++;
-		}
-		else { 
-			next();
-			i++;
-		}
-		console.log('Number of filtered files in array: ' + filteredfiles.length + ", Total number of files in array: " + files.length)
-		return files, filteredfiles;
-	});
-};
+		});
+		return text;
+	}
+}; */
+
+// Define module to be exported as a function(s)
+module.exports = {
+	scanDir: function () {
+		// Call synchronous fileSystem function readdir on dir name
+		var text = fs.readdirSync('./views', 'utf8');
+		return text;
+	}
+}

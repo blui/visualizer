@@ -5,14 +5,21 @@ var express = require('express'),
 
 // Declare module dependencies
 var inputReader = require('./inputReader.js');
+var directoryScanner = require('./directoryScanner.js');
 
 // Create a new application app with express()
 var app = express();
 
-app.get('/inputReader', function(req, res){
-  res.send(inputReader.fileRead());
+// Define a new route for app for module inputReader
+app.get('/inputReader', function(req, res) {
+	res.send(inputReader.fileRead());
+});
+
+// Define a new route for app for module directoryScanner
+app.get('/directoryScanner', function(req, res) {
+	res.send(directoryScanner.scanDir());
 });
 
 // Bind and listen to connections
 app.listen(3000);
-console.log('Listening on port 3000');	//Notify on runtime which port is used
+console.log('Listening on port 3000');

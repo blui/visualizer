@@ -8,13 +8,11 @@
 // Declare node.js module dependencies from API
 var fs = require('fs');
 
-// Define module to be exported as a function fileRead()
+// Define module to be exported as a function(s)
 module.exports = {
 	fileRead: function() {
 		// Call synchronous fileSystem function readFile on file name
 		var text = fs.readFileSync('./simpleParser.js', 'utf8');
-		// Ensure what we are returning is going to be a string
-		var temp = text.toString();
-		return temp;
+		return text;
 	}
 };
