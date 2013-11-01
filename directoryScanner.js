@@ -9,22 +9,23 @@
 // Declare node.js module dependencies from API
 var wrench = require('wrench');
 
+// Declare all required variables
 var rootfolder = './node_modules';
 var filteredfiles = [];
 var files = [];
 var fileextension = '.html';
 
-function directoryScan(rootdirectory){
-	files = wrench.readdirSyncRecursive(rootdirectory)
-	for (var i = 0; i<files.length; i++)
-	{
-		if (files[i].indexOf(fileextension) != -1)
-		{
-			filteredfiles.push(files[i]);
+// Define module to be exported as a function(s)
+module.exports = {
+	scanDir: function() {
+		files = wrench.readdirSyncRecursive(rootfolder)
+		for (var i = 0; i<files.length; i++) { 
+			if (files[i].indexOf(fileextension) != -1) { 
+				filteredfiles.push(files[i]);
+			}
 		}
+		return filteredfiles;
 	}
-	return filteredfiles;
 };
 
-console.log(directoryScan(rootfolder));
-
+//console.log(directoryScan(rootfolder));

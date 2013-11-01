@@ -1,7 +1,15 @@
-doctype 5
+!!!5
 html
   head
-    title= title
+    title #{title} - Project Group 13
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    header
+      h1 CPSC 410 Project Group 13
+    .container
+      .main-content
+        block content
+      .sidebar
+        block sidebar
+    footer
+      p Running on node with Express, Jade, Stylus, Wrench, Walk and more...

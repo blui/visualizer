@@ -12,7 +12,7 @@ var fs = require('fs');
 module.exports = {
 	fileRead: function() {
 		// Call synchronous fileSystem function readFile on file name
-		var text = fs.readFileSync('./simpleParser.js', 'utf8');
-		return text;
+		var temp = fs.readFileSync('./simpleParser.js', 'utf8');
+		return temp;
 	}
 };
