@@ -9,6 +9,7 @@ var express = require('express'),
 // Declare module dependencies
 var inputReader = require('./inputReader.js')
 var directoryScanner = require('./directoryScanner.js')
+var parser = require('./parser.js')
 
 // Create a new application app with express()
 var app = express()
@@ -50,15 +51,19 @@ app.get('/directoryScanner', function(req, res) {
 	res.send(directoryScanner.scanDir())
 });
 
+// Throw paser's results into a var
+var show = parser.parser();
+// Define a new route for app for module parser
+app.get('/parser', function(req, res) {
+	res.send(show)
+});
+
 // Bind and listen to connections
 app.listen(3000)
 console.log('Listening on port 3000')
 
 
-
-
-
-
+// Further testing needed
 http.createServer(function(req, res){
     fs.readFile('visualizerDraft.html',function (err, data){
         res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
