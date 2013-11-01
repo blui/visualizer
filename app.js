@@ -3,7 +3,8 @@
 var express = require('express'), 
 	fs = require('fs'), 
 	stylus = require('stylus'), 
-	nib = require('nib')
+	nib = require('nib'),
+	http = require('http')
 
 // Declare module dependencies
 var inputReader = require('./inputReader.js')
@@ -52,3 +53,16 @@ app.get('/directoryScanner', function(req, res) {
 // Bind and listen to connections
 app.listen(3000)
 console.log('Listening on port 3000')
+
+
+
+
+
+
+http.createServer(function(req, res){
+    fs.readFile('visualizerDraft.html',function (err, data){
+        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+        res.write(data);
+        res.end();
+    });
+}).listen(8000);

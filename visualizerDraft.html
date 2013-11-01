@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3: Force layout</title>
+      <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+        <style type="text/css">
+            /* No style rules here yet */
+          text {
+             pointer-events: none;
+                }
+          circle{
+            opacity: 0.5;
+          }
+          div.tooltip {   
+			  position: absolute;           
+			  text-align: left;           
+			  width: 140px;                  
+			  height: 63px;                 
+			  padding: 2px;             
+			  font: 12px sans-serif;      
+			  background: #A0A0A0;   
+			  border: 0px;      
+			  border-radius: 8px;           
+			  pointer-events: none;         
+			}
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            //Width and height
+            var w = 1000;
+            var h = 800;
+
+            //Original data
+            var dataset = {
+  			"nodes":[
+				{"name":"src","color":7,"size":15,"type":"package", "numlines":132, "comitter":"Jason"},
+				{"name":"setUser","color":3,"size":10,"type":"class","numlines":200, "comitter":"Jason"},
+				{"name":"createUI","color":3,"size":10,"type":"class","numlines":43, "comitter":"Jason"},
+				{"name":"getUser","color":1,"size":5,"type":"method","numlines":533, "comitter":"Jason"},
+				{"name":"sizeOf","color":1,"size":5,"type":"method","numlines":12, "comitter":"Marge"},
+				{"name":"length","color":1,"size":5,"type":"method","numlines":645, "comitter":"Marge"},
+				{"name":"destroyUI","color":1,"size":5,"type":"method","numlines":3, "comitter":"Herberto"},
+				{"name":"createJitsi","color":1,"size":5,"type":"method","numlines":6, "comitter":"Jason"},
+				{"name":"onClick","color":1,"size":5,"type":"method","numlines":14, "comitter":"Jason"},
+				{"name":"createUser","color":1,"size":5,"type":"method","numlines":46, "comitter":"Jason"},
+				{"name":"destroyUser","color":1,"size":5,"type":"method","numlines":132, "comitter":"Jason"},
+				{"name":"countUsers","color":1,"size":5,"type":"method","numlines":3, "comitter":"Jason"},
+				{"name":"findUsers","color":1,"size":5,"type":"method","numlines":23, "comitter":"Marge"},
+				{"name":"initJitsi","color":1,"size":5,"type":"method","numlines":436, "comitter":"Bob"},
+				{"name":"find","color":1,"size":5,"type":"method","numlines":232, "comitter":"Jason"},
+				{"name":"count","color":1,"size":5,"type":"method","numlines":3, "comitter":"Jason"},
+				{"name":"createUser","color":1,"size":5,"type":"method","numlines":123, "comitter":"Jason"},
+				{"name":"launchBrowser","color":1,"size":5,"type":"method","numlines":542, "comitter":"Marge"},
+				{"name":"ChangeJVMFrame","color":1,"size":5,"type":"method","numlines":632, "comitter":"Jason"},
+				{"name":"main","color":1,"size":5,"type":"method","numlines":3, "comitter":"Jason"},
+				{"name":"contactInfo","color":1,"size":5,"type":"method","numlines":64, "comitter":"Jason"},
+				{"name":"destroyContactInfo","color":1,"size":5,"type":"method","numlines":8, "comitter":"Jason"}
+			  ],
+			  "links":[
+				{"source":0,"target":0},
+				{"source":0,"target":1},
+				{"source":0,"target":2},
+				{"source":1,"target":3},
+				{"source":1,"target":4},
+				{"source":1,"target":5},
+				{"source":2,"target":6},
+				{"source":2,"target":7},
+				{"source":2,"target":8},
+				{"source":5,"target":9},
+				{"source":1,"target":9},
+				{"source":2,"target":10},
+				{"source":2,"target":11},
+				{"source":2,"target":12},
+				{"source":2,"target":13},
+				{"source":16,"target":14},
+				{"source":17,"target":15},
+				{"source":18,"target":16},
+				{"source":19,"target":17},
+				{"source":20,"target":18},
+				{"source":21,"target":20},
+				{"source":15,"target":21},
+				{"source":14,"target":12},
+				{"source":17,"target":1},
+				{"source":18,"target":1}    
+			  ]
+			};
+			
+			var userList = ["Jason", "Marge", "Bob"];
+						
+            //Initialize a default force layout, using the nodes and edges in dataset
+            var force = d3.layout.force()
+                                 .nodes(dataset.nodes)
+                                 .links(dataset.links)
+                                 .size([w, h])
+                                 .linkDistance([250])
+                                 .charge([-400])
+                                 .start();
+
+            var colors = d3.scale.category10();
+
+			var tooltip = d3.select("body")
+				.append("div")
+				.attr("class", "tooltip")
+				.style("position", "absolute")
+				.style("z-index", "10")
+				.style("visibility", "hidden")
+    
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+            
+        	var box = svg.append("rect")
+        				.attr("x", 50)
+        				.attr("y", 0)
+        				.attr("width", 200)
+        				.attr("height", 100)
+        				.style("fill", "white")
+        				.style("stroke", "black");
+      				
+           var users = svg.selectAll("circle")
+    			.data(userList)
+   			 	.enter()
+   			 	.append("g");
+            
+            users.append("circle")
+            	 .attr("cx", function(d, i) { return (i+2) * 50})
+            	 .attr("cy", 48)
+            	 .attr("r", 20)
+            	 .style("fill", function(d) {
+                	return colors(d.charCodeAt(0) % 20);
+                });
+                
+            users.append("text")
+            	.attr("x", function(d, i) { return (i+2) * 50})
+            	.attr("y", 50)
+            	.attr("font-family", "sans-serif")
+               	.attr("text-anchor", "middle")
+            	.attr("font-size", 15)
+            	.text(function(d) {return d});
+            	
+            //Create edges as lines
+            var edges = svg.selectAll("line")
+                .data(dataset.links)
+                .enter()
+                .append("line")
+                .style("stroke", "#606060")
+                .style("stroke-width", 3);
+            
+            edges.forEach(function(d) { console.log("hdood ")});
+            
+          var node = svg.selectAll(".node")
+                .data(dataset.nodes)
+                .enter()
+                .append("g")
+                .attr("class", "node")
+                .call(force.drag);
+                
+ 		 var op = 0;
+ 		 
+            //Create nodes as circles
+          node.append("circle")
+                .attr("r", function(d) {return (Math.log(d.numlines)*d.size/1.3)})
+                .style("opacity", 0)
+                .style("fill", function(d) {
+                    return colors(d.color);
+                })
+                .style("stroke", function(d) {
+                	return colors(d.comitter.charCodeAt(0) % 20);
+                })
+                .style("stroke-width", 8)
+                .attr("class","circle")
+                 .on("mouseover",function(d) {
+        				tooltip.transition()
+							   .duration(200)
+							   .style("opacity", .8)     
+							   .style("visibility", "visible");          
+                		tooltip.html("Name: " + d.name + "<br/>" +
+                					 "Type: " + d.type + "<br/>" +
+                					 "Comitted by: " + d.comitter + "<br/>" +
+                					 "Lines of Code: " + d.numlines)
+                			   .style("left", (d3.event.pageX) + "px")     
+                			   .style("top", (d3.event.pageY - 28) + "px");
+                }   )
+                .on("mouseout", mouseout)
+                .on("click", function(d) {
+                	op = 1;
+                })
+                .transition()
+                	.delay(function(d, i) { return i * 300 })
+      				.duration(800)  
+      				.style("opacity", 0.7);
+          
+            //Add text
+             node.append("text")
+             	.style("opacity", 0)
+             	.attr("font-family", "sans-serif")
+             	.attr("text-anchor", "middle")
+              	.attr("font-size", function(d) { return Math.log(d.size)*7})
+              	.text(function(d) { return d.name;         })
+              	.transition()
+              		.delay(function(d, i) { return i * 300 })
+      				.duration(800)  
+      				.style("opacity", 1);
+      				
+            //Every time the simulation "ticks", this will be called
+            force.on("tick", function() {
+            	var prevEdge = -1;
+                edges
+                	 .style("opacity", op)
+                	 .attr("x1", function(d) { return d.source.x; })
+                     .attr("y1", function(d) { return d.source.y; })
+                     .attr("x2", function(d) { return d.target.x; })
+                     .attr("y2", function(d) { return d.target.y; })
+                     .transition()
+                		.delay(function(d, i) { return i * 320 })
+      					.duration(300)  
+      					.style("opacity", 1);
+                node
+                     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            });
+	
+        		function mouseover(d) {
+        			tooltip.transition()
+						.delay(500)
+						.style("opacity", .8)     
+						.style("visibility", "visible")          
+						.style("left", (d3.event.pageX) + "px")     
+                		.style("top", (d3.event.pageY - 28) + "px");
+                }          
+                function mouseout(d) {
+                 	tooltip.transition()
+                 		.duration(500)
+                 		.style("opacity", 0)
+                }
+        </script>
+    </body>
+</html>
