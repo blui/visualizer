@@ -1,0 +1,28 @@
+{
+    "user1": {
+ 
+        "Country": {"Name": "USA", "Lat": 15, "Long":14},
+        "Contribution": 15000,
+        "Commits": 1200,
+        "Classes": {
+            "Jitsirox": {
+                "Methods": {
+                    "GetJitsi": {
+                        "Lines of Code": 16,
+                        "Number of loops": 1,
+                        "Type": "Private"},
+                    "SetJitsi": {
+                        "Lines of Code" : 13,
+                        "Number of loops": 3,
+                        "Type": "Private"}
+                },
+                "Variables": {
+                    "Jitsi": {
+                        "Type": "Public"
+                    }
+                },
+                "Contribution": 144
+            }
+        }
+    }
+}
