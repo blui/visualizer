@@ -1,27 +1,26 @@
 {
-    "user1": {
- 
-        "Country": {"Name": "USA", "Lat": 15, "Long":14},
-        "Contribution": 15000,
-        "Commits": 1200,
-        "Classes": {
-            "Jitsirox": {
-                "Methods": {
-                    "GetJitsi": {
-                        "Lines of Code": 16,
-                        "Number of loops": 1,
-                        "Type": "Private"},
-                    "SetJitsi": {
-                        "Lines of Code" : 13,
-                        "Number of loops": 3,
-                        "Type": "Private"}
-                },
-                "Variables": {
-                    "Jitsi": {
-                        "Type": "Public"
-                    }
-                },
-                "Contribution": 144
+    "Class": {
+        "Name of class": "className",
+        "Parent": "nameOfParent",
+        "Type": "public",
+        "Views": {"String": "view1"},
+        "Modifies": {"String": "modifies1"},
+        "Authors": "createrName",
+        "Contributors": {"Name": "cont1"},
+        "Lines of code": 99,
+        "Number of loops": 3,
+        "Creation date": "date",
+        "Methods": {
+            "method1": {
+                "Type": "public",
+                "Modifies": {"String": "modifies1"},
+                "Number of lines": 10
+            }
+        },
+        "Variables": {
+            "varible1": {
+                "Type": "public",
+                "Modifies": {"String": "modifies1"}
             }
         }
     }
