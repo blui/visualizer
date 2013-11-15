@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "gitReader.js"
   },
   "dependencies": {
     "express": "x",
@@ -11,6 +11,7 @@
 	"walk": "x",
 	"jade": "x",
 	"stylus": "x",
-	"nib": "x"
+	"nib": "x",
+	"octonode": "x"
   }
 }
