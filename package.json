@@ -1,9 +1,9 @@
 {
-  "name": "Group-13-Visualizer",
-  "version": "0.0.3",
+  "name": "Planets-Visualizer",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "gitReader.js"
+    "start": "app.js"
   },
   "dependencies": {
     "express": "x",
@@ -12,6 +12,7 @@
 	"jade": "x",
 	"stylus": "x",
 	"nib": "x",
-	"octonode": "x"
+	"octonode": "x",
+	"gfx": "x"
   }
 }

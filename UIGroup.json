@@ -1,0 +1,133 @@
+{
+    "UIGroup": {
+        "Name": "UIGroup",
+        "Parent": "",
+        "Type": "public",
+        "Interfaces": [],
+        "Modifies": [
+            "abstract"
+        ],
+        "Authors": "yanas",
+        "Contributors": [
+            "yanas",
+            "damencho"
+        ],
+        "Lines of code": 151,
+        "Number of loops": 0,
+        "Creation date": "November 15, 2012",
+        "Methods": {
+            "getDescriptor": {
+                "Type": "public",
+                "Modifies": [
+                    "object"
+                ],
+                "Lines": 1
+            },
+            "getDisplayName": {
+                "Type": "public",
+                "Modifies": [
+                    "string"
+                ],
+                "Lines": 1
+            },
+            "getDisplayDetails": {
+                "Type": "public",
+                "Modifies": [
+                    "string"
+                ],
+                "Lines": 4
+            },
+            "setDisplayDetails": {
+                "Type": "public",
+                "Modifies": [
+                    "void"
+                ],
+                "Lines": 4
+            },
+            "getSourceIndex": {
+                "Type": "public",
+                "Modifies": [
+                    "int"
+                ],
+                "Lines": 1
+            },
+            "getParentGroup": {
+                "Type": "public",
+                "Modifies": [
+                    "UIGroup"
+                ],
+                "Lines": 1
+            },
+            "isGroupCollapsed": {
+                "Type": "public",
+                "Modifies": [
+                    "boolean"
+                ],
+                "Lines": 1
+            },
+            "countOnlineChildContacts": {
+                "Type": "public",
+                "Modifies": [
+                    "int"
+                ],
+                "Lines": 1
+            },
+            "countChildContacts": {
+                "Type": "public",
+                "Modifies": [
+                    "int"
+                ],
+                "Lines": 1
+            },
+            "getId": {
+                "Type": "public",
+                "Modifies": [
+                    "string"
+                ],
+                "Lines": 1
+            },
+            "getRightButtonMenu": {
+                "Type": "public",
+                "Modifies": [
+                    "component"
+                ],
+                "Lines": 1
+            },
+            "getPreferredHeight": {
+                "Type": "public",
+                "Modifies": [
+                    "int"
+                ],
+                "Lines": 4
+            },
+            "setPreferredHeight": {
+                "Type": "public",
+                "Modifies": [
+                    "void"
+                ],
+                "Lines": 4
+            },
+            "getCustomActionButtons": {
+                "Type": "public",
+                "Modifies": [
+                    "collection"
+                ],
+                "Lines": 4
+            }
+        },
+        "Variables": {
+            "preferredGroupHeight": {
+                "Type": "private",
+                "Modifies": [
+                    "int"
+                ]
+            },
+            "displayDetails": {
+                "Type": "private",
+                "Modifies": [
+                    "string"
+                ]
+            }
+        }
+    }
+}
