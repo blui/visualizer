@@ -5,12 +5,14 @@
 	</head>
 	<body bgcolor="#000000">
 		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
-		<script>
-	
-			//Set up scene and camera
+		<script>	
+				//Set up scene and camera
 				var scene = new THREE.Scene();
 				var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-
+				camera.position.set(0,0,50);
+				camera.up = new THREE.Vector3(0,0,1);
+				camera.lookAt(new THREE.Vector3(0.1,1,2));
+	
 				//Set up renderer
 				var renderer = new THREE.WebGLRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -188,21 +190,73 @@
 				sphere10.geometry.dynamic = true;
 				sphere10.position.x = -45;
 				scene.add(sphere10);
-
-				//Add light and add to scene
-				//var light = new THREE.AmbientLight( 0xFFD700 );
-				//scene.add( light );
 				
-				//Move back camera position
-				camera.position.z = 50;
-		
-				function render() 
+				
+				//Keyboard listener
+				window.addEventListener('keypress', function (e) {
+						if (e.keyCode === 97) 
+						{
+							camera.position.x -= 0.5;
+						}
+						else if (e.keyCode === 100)
+						{
+							camera.position.x += 0.5;
+						}
+						else if (e.keyCode === 119)
+						{
+							camera.position.y += 0.5;
+						}
+						else if (e.keyCode === 120)
+						{
+							camera.position.y -= 0.5;
+						}
+						else if (e.keyCode === 115)
+						{
+							camera.position.z += 0.5;
+						}
+						else if (e.keyCode === 83)
+						{
+							camera.position.z -= 0.5;
+						}
+						else if (e.keyCode === 114)
+						{
+							camera.position.set(0,0,50);
+						}
+						else if (e.keyCode === 98)
+						{
+							camera.rotation.x -= 0.01;
+						}
+						else if (e.keyCode === 116)
+						{
+							camera.rotation.x += 0.01;
+						}
+						else if (e.keyCode === 104)
+						{
+							camera.rotation.y += 0.01;
+						}
+						else if (e.keyCode === 102)
+						{
+							camera.rotation.y -= 0.01;
+						}
+						else if (e.keyCode === 103)
+						{
+							camera.rotation.z += 0.01;
+						}
+						else if (e.keyCode === 71)
+						{
+							camera.rotation.z -= 0.01;
+						}
+				}, false);
+				
+				//Add light and add to scene
+				var light = new THREE.AmbientLight( 0xFFD700 );
+				scene.add( light );
+				
+				function animate()
 				{
-					requestAnimationFrame(render);
+					requestAnimationFrame(animate);
 					
 					//Add rotation animation
-					sphere1.rotation.x += 0.01;
-					sphere1.rotation.y += 0.01;
 					sphere2.rotation.x += 0.01;
 					sphere2.rotation.y += 0.01;
 					sphere3.rotation.x += 0.01;
@@ -220,11 +274,17 @@
 					sphere9.rotation.x += 0.01;
 					sphere9.rotation.y += 0.01;
 					sphere10.rotation.x += 0.01;
-					sphere10.rotation.y += 0.01;					
-					renderer.render(scene, camera);
+					sphere10.rotation.y += 0.01;						
+					render();
 				}
-				render();
-		
+						
+				function render() 
+				{													
+					renderer.render(scene, camera);
+				}	
+				
+				animate();
+				
 		</script>
 	</body>
 </html>
