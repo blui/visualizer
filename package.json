@@ -1,6 +1,6 @@
 {
   "name": "Planets-Visualizer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "start": "app.js"
@@ -12,7 +12,6 @@
 	"jade": "x",
 	"stylus": "x",
 	"nib": "x",
-	"octonode": "x",
-	"gfx": "x"
+	"three": "x"
   }
 }

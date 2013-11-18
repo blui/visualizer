@@ -4,12 +4,14 @@ var express = require('express'),
 	fs = require('fs'), 
 	stylus = require('stylus'), 
 	nib = require('nib'),
-	http = require('http')
+	http = require('http'),
+	three = require('three')
 
 // Declare module dependencies
 var inputReader = require('./inputReader.js')
 var directoryScanner = require('./directoryScanner.js')
 var parser = require('./parser.js')
+var planetData = require('./fakeData.json')
 
 // Create a new application app with express()
 var app = express()
@@ -58,14 +60,17 @@ app.get('/parser', function(req, res) {
 	res.send(show)
 });
 
+console.log(planetData)
+
+
+
 // Bind and listen to connections
 app.listen(3000)
 console.log('Listening on port 3000')
 
-
 // Further testing needed
 http.createServer(function(req, res){
-    fs.readFile('visualizerDraft.html',function (err, data){
+    fs.readFile('planetPage.html',function (err, data){
         res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
         res.write(data);
         res.end();

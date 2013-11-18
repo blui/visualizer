@@ -1,11 +1,16 @@
-<html>
-	<head>
-		<title>Code Planet</title>
-		<style>canvas { width: 100%; height: 100% }</style>
-	</head>
-	<body bgcolor="#000000">
-		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
-		<script>
+
+/* 
+	Module: planetPage.js
+	Description: The main core of our visualization; JSON file will be read in with data
+	about the code that is analysed and creates visuals of a solar system that represnets
+	that data.
+ */
+ 
+ var THREE = require('three')
+ 
+ module.exports {
+	makePlanet: function() {
+ 
 				//Set up scene and camera
 				var scene = new THREE.Scene();
 				var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -223,7 +228,5 @@
 					renderer.render(scene, camera);
 				}
 				render();
-		
-		</script>
-	</body>
-</html>
+	}
+}

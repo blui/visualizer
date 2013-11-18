@@ -3,7 +3,8 @@
         "Name": "UIGroup",
         "Parent": "",
         "Type": "public",
-        "Interfaces": [],
+        "Interfaces": [
+		],
         "Modifies": [
             "abstract"
         ],
@@ -134,8 +135,10 @@
         "Name": "Container",
         "Parent": "",
         "Type": "public",
-        "Interfaces": [],
-        "Modifies": [],
+        "Interfaces": [
+		],
+        "Modifies": [
+		],
         "Authors": "yanas",
         "Contributors": [
             "yanas",
@@ -148,7 +151,8 @@
         "Methods": {
             "Container": {
                 "Type": "public",
-                "Modifies": [],
+                "Modifies": [
+				],
                 "Lines": 4
             },
             "getID": {
@@ -221,7 +225,8 @@
         "Name": "UIContact",
         "Parent": "",
         "Type": "public",
-        "Interfaces": [],
+        "Interfaces": [
+		],
         "Modifies": [
             "abstract"
         ],
@@ -332,6 +337,7 @@
                 "Lines": 4
             }
         },
-        "Variables": {}
+        "Variables": {
+		}
     }
 }
