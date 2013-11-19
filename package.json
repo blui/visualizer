@@ -1,17 +1,15 @@
 {
-  "name": "Planets-Visualizer",
-  "version": "0.1.1",
-  "private": true,
-  "scripts": {
-    "start": "app.js"
-  },
-  "dependencies": {
-    "express": "x",
-	"wrench": "x",
-	"walk": "x",
-	"jade": "x",
-	"stylus": "x",
-	"nib": "x",
-	"three": "x"
-  }
+	"name": "Group-13-Code-Planet",
+	"version": "1.0.1",
+	"scripts": {
+		"start": "app.js"
+	},
+	"dependencies": {
+		"express": "x",
+		"wrench": "x",
+		"jade": "x",
+		"stylus": "x",
+		"nib": "x",
+		"three": "x"
+	}
 }
