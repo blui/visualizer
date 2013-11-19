@@ -19,7 +19,10 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 				
+				//Planet positions
 				var planets = new Array();
+				var planetradii = new Array();
+				var center = 0;
 				
 				function drawPlanet(planetxposition, sunyposition, planetsize)
 				{
@@ -32,6 +35,7 @@
 					planet.position.x = planetxposition;
 					planet.position.y = sunyposition;
 					planets.push(planet);
+					planetradii.push(planetxposition);
 					scene.add(planet);
 				}
 				
@@ -126,25 +130,24 @@
 						planets[i].rotation.y += 0.01;
 					}
 				}
+				
+				function orbitAnimation()
+				{
+					for (var i = 0; i< planets.length; i++)
+					{
+						planets[i].position.x = planetradii[i]*Math.sin(center);
+						planets[i].position.z = planetradii[i]*Math.cos(center);
+					}
+					center += 0.03;
+				}
 							
 				function animate()
 				{
 					requestAnimationFrame(animate);
 					
 					rotateAnimation();
+					orbitAnimation();
 
-					//centerplanet1 += speedplanet1;
-					//planet1.position.x = radiusplanet1*Math.sin(centerplanet1);
-					//planet1.position.z = radiusplanet1*Math.cos(centerplanet1);
-					//planet1.rotation.x += 0.01;
-					//planet1.rotation.y += 0.01;
-					//centerplanet2 += speedplanet2;
-					//planet2.position.x = radiusplanet2*Math.sin(centerplanet2);
-					//planet2.position.z = radiusplanet2*Math.cos(centerplanet2);
-					//planet2.rotation.x += 0.01;
-					//planet2.rotation.y += 0.01;
-
-					//Render =D
 					render();
 				}
 						
@@ -152,9 +155,12 @@
 				{													
 					renderer.render(scene, camera);
 				}	
-				drawMultipleSunsAndPlanets(3, 4, 8, 4);
+				
 				keyboardListener();
 				animate();
+				
+				//Test data
+				drawMultipleSunsAndPlanets(3, 4, 8, 4);
 				
 		</script>
 	</body>
