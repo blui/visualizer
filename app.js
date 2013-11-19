@@ -8,8 +8,7 @@ var express = require('express'),
 	three = require('three')
 
 // Declare module dependencies
-var inputReader = require('./inputReader.js')
-var directoryScanner = require('./directoryScanner.js')
+var reader = require('./dirAndFileReader.js')
 var parser = require('./parser.js')
 var planetData = require('./fakeData.json')
 
@@ -43,15 +42,16 @@ app.get('/', function (req, res) {
   )
 })
 
+var filePaths = reader.dirRead();
 // Define a new route for app for module inputReader
-app.get('/inputReader', function(req, res) {
-	res.send(inputReader.fileRead())
+app.get('/reader', function(req, res) {
+	res.send(reader.fileRead(filePaths))
 });
 
-// Define a new route for app for module directoryScanner
+/* // Define a new route for app for module directoryScanner
 app.get('/directoryScanner', function(req, res) {
 	res.send(directoryScanner.scanDir())
-});
+}); */
 
 // Throw paser's results into a var
 var show = parser.parser();
