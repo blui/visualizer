@@ -1,24 +1,14 @@
-<html>
-	<head>
-		<title>Code Galaxy</title>
-		<style>canvas { width: 100%; height: 100% }</style>
-	</head>
-	<body bgcolor="#000000">
-		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
-		<script>
 				//Set up scene and camera
 				var scene = new THREE.Scene();
 				var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 				camera.position.set(0,-40,160);
 				camera.up = new THREE.Vector3(0,0,1);
 				camera.lookAt(new THREE.Vector3(0.3,2,2));
-				
+	
 				//Set up renderer
 				var renderer = new THREE.WebGLRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
-				
-				//Variables for the sun
 				
 				//Set up variables for orbit animation
 				var centerplanet1 = 0, centerplanet2 = 0, centerplanet3 = 0, centerplanet4 = 0, centerplanet5 = 0,
@@ -32,15 +22,46 @@
 				var planet1size = 4, planet2size = 4, planet3size = 4, planet4size = 4, planet5size = 4,
 				planet6size = 4, planet7size = 4, planet8size = 4, planet9size = 4;
 				
-				//Set up planet geometry
-				var planetgeometry = new THREE.SphereGeometry(planet1size,30,30);
-				var planetmaterial = new THREE.MeshBasicMaterial();
-				var planet1 = new THREE.Mesh(planetgeometry, planetmaterial);
+				//Draw sun
+				var sunradius = 2;
+				var sunwidthsegments = 30;
+				var sunheightsegments = 30;
+				//Set geometry
+				var geometry = new THREE.SphereGeometry(sunradius,sunwidthsegments,sunheightsegments);
+				//Choose material
+				var material = new THREE.MeshPhongMaterial({shading: THREE.SmoothShading, blending:    THREE.AdditiveBlending, color: 0x6FFFF00, shininess: 1, vertexColors: false  } );
+				//Choose and set object color
+				//var suncolor = new THREE.Color(0x6FFFF00);
+				//material.color.copy(suncolor);
+				//Add sun to scene
+				var sun = new THREE.Mesh(geometry, material);
+				sun.geometry.dynamic = true;
+				sun.scale.x = 4;
+				sun.scale.y = 4;
+				sun.scale.z = 4;
+				scene.add(sun);
 				
+				//Draw planet 1
+				var planet1widthsegments = 30;
+				var planet1heightsegments = 30;
+				//Set geometry
+				var geometry = new THREE.SphereGeometry(planet1size,planet1widthsegments,planet1heightsegments);
+				//Choose material
+				var material = new THREE.MeshBasicMaterial();
+				//Choose and set object color
+				var planet1color = new THREE.Color(0x6A5ACD);
+				material.color.copy(planet1color);
+				//Add planet1 to scene
+				var planet1 = new THREE.Mesh(geometry, material);
+				planet1.geometry.dynamic = true;
+				planet1.position.x = 17;
+				scene.add(planet1);
 				
 				//Draw planet 2
+				var planet2widthsegments = 30;
+				var planet2heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet2size,30,30);
+				var geometry = new THREE.SphereGeometry(planet2size,planet2widthsegments,planet2heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -53,8 +74,10 @@
 				scene.add(planet2);
 				
 				//Draw planet 3
+				var planet3widthsegments = 30;
+				var planet3heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet3size,30,30);
+				var geometry = new THREE.SphereGeometry(planet3size,planet3widthsegments,planet3heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -67,8 +90,10 @@
 				scene.add(planet3);
 				
 				//Draw planet 4
+				var planet4widthsegments = 30;
+				var planet4heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet4size,30,30);
+				var geometry = new THREE.SphereGeometry(planet4size,planet4widthsegments,planet4heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -81,8 +106,10 @@
 				scene.add(planet4);
 				
 				//Draw planet 5
+				var planet5widthsegments = 30;
+				var planet5heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet5size,30,30);
+				var geometry = new THREE.SphereGeometry(planet5size,planet5widthsegments,planet5heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -95,8 +122,10 @@
 				scene.add(planet5);
 				
 				//Draw planet 6
+				var planet6widthsegments = 30;
+				var planet6heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet6size,30,30);
+				var geometry = new THREE.SphereGeometry(planet6size,planet6widthsegments,planet6heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -109,8 +138,10 @@
 				scene.add(planet6);		
 				
 				//Draw planet 7
+				var planet7widthsegments = 30;
+				var planet7heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet7size,30,30);
+				var geometry = new THREE.SphereGeometry(planet7size,planet7widthsegments,planet7heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -123,8 +154,10 @@
 				scene.add(planet7);
 				
 				//Draw planet 8
+				var planet8widthsegments = 30;
+				var planet8heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet8size,30,30);
+				var geometry = new THREE.SphereGeometry(planet8size,planet8widthsegments,planet8heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -137,8 +170,10 @@
 				scene.add(planet8);
 				
 				//Draw planet 9
+				var planet9widthsegments = 30;
+				var planet9heightsegments = 30;
 				//Set geometry
-				var geometry = new THREE.SphereGeometry(planet9size,30,30);
+				var geometry = new THREE.SphereGeometry(planet9size,planet9widthsegments,planet9heightsegments);
 				//Choose material
 				var material = new THREE.MeshBasicMaterial();
 				//Choose and set object color
@@ -149,19 +184,7 @@
 				planet9.geometry.dynamic = true;
 				planet9.position.x = -153;
 				scene.add(planet9);
-				
-				function drawPlanet1(){
-				//Draw planet 1
-				//Choose and set object color
-				var planet1color = new THREE.Color(0x6A5ACD);
-				planetmaterial.color.copy(planet1color);
-				//Add planet1 to scene
-				planet1.geometry.dynamic = true;
-				planet1.position.x = 17;
-				scene.add(planet1);
-				}
-				
-				function keyboardListener(){
+		
 				//Keyboard listener
 				window.addEventListener('keypress', function (e) {
 						if (e.keyCode === 97) 
@@ -213,34 +236,10 @@
 							camera.rotation.z -= 0.01;
 						}
 				}, false);
-				}
-				
-				function drawSun(position){
-					var sunradius = 2;
-					var sungeometry = new THREE.SphereGeometry(sunradius,30,30);
-					var sunmaterial = new THREE.MeshBasicMaterial();
-					var suncolor = new THREE.Color(0x6FFFF00);
-					sunmaterial.color.copy(suncolor);
-					var sun = new THREE.Mesh(sungeometry, sunmaterial);
-					sun.geometry.dynamic = true;
-					sun.scale.x = 4;
-					sun.scale.y = 4;
-					sun.scale.z = 4;
-					sun.position.y = -position;
-					scene.add(sun);		
-				}
-				
-				function drawMultipleSuns(numberOfClasses)
-				{
-					for (var i=0; i<numberOfClasses; i++)
-					{
-						drawSun(i*150);
-					}
-				}
 				
 				//Add light and add to scene
-				//var light = new THREE.AmbientLight( 0xFFD700 );
-				//scene.add( light );
+				var light = new THREE.AmbientLight( 0xFFD700 );
+				scene.add( light );
 				
 				function animate()
 				{
@@ -301,11 +300,4 @@
 					renderer.render(scene, camera);
 				}	
 				
-				drawPlanet1();
-				keyboardListener();
-				drawMultipleSuns(10);
 				animate();
-				
-		</script>
-	</body>
-</html>
