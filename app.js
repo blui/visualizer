@@ -81,9 +81,9 @@ app.get('/visualization.html', function(req, res) {
 	renderer.setSize(width, height);
 	document.body.appendChild(renderer.domElement);
 
-	res.send(visualization.drawMultipleSunsAndPlanets(3, 4, 8, 4))
-	res.send(visualization.keyboardListener())
-	res.send(visualization.animate())
+	visualization.drawMultipleSunsAndPlanets(3, 4, 8, 4)
+	visualization.keyboardListener()
+	visualization.animate()
 }); 
 
 // Bind and listen to connections
