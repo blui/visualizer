@@ -10,13 +10,13 @@ var express = require('express'),
 	stylus = require('stylus'), 
 	nib = require('nib'),
 	http = require('http'),
-	three = require('three');
+	THREE = require('three');
 
 // Declare module dependencies (functions we made)
 var reader = require('./dirAndFileReader.js'),
 	parser = require('./parser.js'),
-	planetData = require('./fakeData.json');
-	//visualization = require('./visualization.js');
+	planetData = require('./fakeData.json'),
+	visualization = require('./visualization.js');
 
 // Create a new application app with express()
 var app = express();
@@ -61,17 +61,30 @@ var show = parser.parser();
 app.get('/parser', function(req, res) {
 	res.send(show)
 });
-
-/* 
+ 
 // Define a new route for app for displaying visualization
 // Still buggy; does not work fully
 app.get('/visualization.html', function(req, res) {
-	res.send(visualization.drawPlanet1())
-	res.send(visualization.drawMultipleSuns(10))
+
+	//Set up scene and camera
+	width = 1980;
+	height = 1020;
+
+	var scene = new THREE.Scene();
+	var camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+	camera.position.set(0,-40,160);
+	camera.up = new THREE.Vector3(0,0,1);
+	camera.lookAt(new THREE.Vector3(0.3,2,2));
+
+	//Set up renderer
+	var renderer = new THREE.WebGLRenderer();
+	renderer.setSize(width, height);
+	document.body.appendChild(renderer.domElement);
+
+	res.send(visualization.drawMultipleSunsAndPlanets(3, 4, 8, 4))
 	res.send(visualization.keyboardListener())
 	res.send(visualization.animate())
 }); 
- */
 
 // Bind and listen to connections
 app.listen(3000);
