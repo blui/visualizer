@@ -19,50 +19,54 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 				
-				function drawPlanet(position)
+				function rotateAnimation(x,y)
 				{
-					var planetsize = 4
+					x += 0.01;
+					y += 0.01;
+				}
+				
+				function drawPlanet(planetxposition, sunyposition, planetsize)
+				{
 					var planetgeometry = new THREE.SphereGeometry(planetsize,30,30);
 					var planetmaterial = new THREE.MeshBasicMaterial();
 					var planetcolor = new THREE.Color(0x6A5ACD);
 					planetmaterial.color.copy(planetcolor);
 					var planet = new THREE.Mesh(planetgeometry, planetmaterial);
 					planet.geometry.dynamic = true;
-					planet.position.x = position;
+					planet.position.x = planetxposition;
+					planet.position.y = sunyposition;
 					scene.add(planet);
+					rotateAnimation(planet.rotation.x, planet.rotation.y);
 				}
 				
-				function drawMultiplePlanets(numberOfPlanets)
+				function drawMultiplePlanets(numberofplanets, sunyposition, planetsize)
 				{
-					for (var i=0; i<numberOfPlanets; i++)
+					for (var i=0; i<numberofplanets; i++)
 					{
-						drawPlanet(17+(i*17));
+						drawPlanet(17+(i*17), sunyposition, planetsize);
 					}
 				}				
 	
-				function drawSun(position)
+				function drawSun(yposition, sunsize)
 				{
-					var sunradius = 2;
-					var sungeometry = new THREE.SphereGeometry(sunradius,30,30);
+					var sungeometry = new THREE.SphereGeometry(sunsize,30,30);
 					var sunmaterial = new THREE.MeshBasicMaterial();
 					var suncolor = new THREE.Color(0x6FFFF00);
 					sunmaterial.color.copy(suncolor);
 					var sun = new THREE.Mesh(sungeometry, sunmaterial);
 					sun.geometry.dynamic = true;
-					sun.scale.x = 4;
-					sun.scale.y = 4;
-					sun.scale.z = 4;
-					sun.position.y = -position;
+					sun.position.y = -yposition;
 					scene.add(sun);		
 				}
 				
-				function drawMultipleSuns(numberOfClasses)
+				function drawMultipleSunsAndPlanets(numberofclasses, numberofplanets, sunsize, planetsize)
 				{
-					for (var i=0; i<numberOfClasses; i++)
+					for (var i=0; i<numberofclasses; i++)
 					{
-						drawSun(i*150);
+						drawSun(i*150, sunsize);
+						drawMultiplePlanets(numberofplanets, -(i*150), planetsize);
 					}
-				}				
+				}	
 	
 				function keyboardListener()
 				{
@@ -142,8 +146,7 @@
 				{													
 					renderer.render(scene, camera);
 				}	
-				drawMultiplePlanets(4);
-				drawMultipleSuns(3);
+				drawMultipleSunsAndPlanets(3, 4, 8, 4);
 				keyboardListener();
 				animate();
 				
