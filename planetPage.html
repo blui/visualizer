@@ -19,15 +19,11 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 				
-				function rotateAnimation(x,y)
-				{
-					x += 0.01;
-					y += 0.01;
-				}
+				var planets = new Array();
 				
 				function drawPlanet(planetxposition, sunyposition, planetsize)
 				{
-					var planetgeometry = new THREE.SphereGeometry(planetsize,30,30);
+					var planetgeometry = new THREE.SphereGeometry(planetsize,6,6);
 					var planetmaterial = new THREE.MeshBasicMaterial();
 					var planetcolor = new THREE.Color(0x6A5ACD);
 					planetmaterial.color.copy(planetcolor);
@@ -35,8 +31,8 @@
 					planet.geometry.dynamic = true;
 					planet.position.x = planetxposition;
 					planet.position.y = sunyposition;
+					planets.push(planet);
 					scene.add(planet);
-					rotateAnimation(planet.rotation.x, planet.rotation.y);
 				}
 				
 				function drawMultiplePlanets(numberofplanets, sunyposition, planetsize)
@@ -121,12 +117,22 @@
 						}
 				}, false);
 				}
+				
+				function rotateAnimation()
+				{
+					for (var i = 0; i< planets.length; i++)
+					{
+						planets[i].rotation.x += 0.01;
+						planets[i].rotation.y += 0.01;
+					}
+				}
 							
 				function animate()
 				{
 					requestAnimationFrame(animate);
 					
-					//Add rotation animation
+					rotateAnimation();
+
 					//centerplanet1 += speedplanet1;
 					//planet1.position.x = radiusplanet1*Math.sin(centerplanet1);
 					//planet1.position.z = radiusplanet1*Math.cos(centerplanet1);
