@@ -6,39 +6,48 @@
 	<body bgcolor="#000000">
 		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
 		<script>
-
-				//Set up scene and camera
-				var scene = new THREE.Scene();
-				var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+				var camera, scene, renderer; 
+				
+				//Planet and sun objects
+				var planets = new Array();
+				var suns = new Array();
+				
+				var planetradii = new Array();
+				var planetcentres = new Array();
+				var planetorbitspeeds = new Array();
+				var planetrotationspeeds = new Array();
+				
+				function init()
+				{
+				scene = new THREE.Scene();
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 				camera.position.set(0,-40,160);
 				camera.up = new THREE.Vector3(0,0,1);
 				camera.lookAt(new THREE.Vector3(0.3,2,2));
-				
-				//Set up renderer
-				var renderer = new THREE.WebGLRenderer();
+				renderer = new THREE.WebGLRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
+				}
 				
-				//Planet positions
-				var planets = new Array();
-				var planetradii = new Array();
-				var center = 0;
-				
-				function drawPlanet(planetxposition, sunyposition, planetsize)
+				//Draw a planet for a given sun with a specific size and position
+				function drawPlanet(planetxposition, sunyposition, planetsize, planetcolour, orbitspeed, rotationspeed)
 				{
-					var planetgeometry = new THREE.SphereGeometry(planetsize,6,6);
+					var planetgeometry = new THREE.SphereGeometry(planetsize,5,5);
 					var planetmaterial = new THREE.MeshBasicMaterial();
-					var planetcolor = new THREE.Color(0x6A5ACD);
-					planetmaterial.color.copy(planetcolor);
+					planetmaterial.color.copy(new THREE.Color(planetcolour));
 					var planet = new THREE.Mesh(planetgeometry, planetmaterial);
 					planet.geometry.dynamic = true;
 					planet.position.x = planetxposition;
 					planet.position.y = sunyposition;
 					planets.push(planet);
 					planetradii.push(planetxposition);
+					planetcentres.push(0);
+					planetorbitspeeds.push(orbitspeed);
+					planetrotationspeeds.push(rotationspeed);
 					scene.add(planet);
 				}
 				
+				//Draw many planets for a given sun with a specific size spaced evenly apart
 				function drawMultiplePlanets(numberofplanets, sunyposition, planetsize)
 				{
 					for (var i=0; i<numberofplanets; i++)
@@ -46,16 +55,17 @@
 						drawPlanet(17+(i*17), sunyposition, planetsize);
 					}
 				}				
-	
-				function drawSun(yposition, sunsize)
+					
+				//Draw a sun at a specific location with a specific size and colour
+				function drawSun(sunyposition, sunsize, suncolour)
 				{
 					var sungeometry = new THREE.SphereGeometry(sunsize,30,30);
 					var sunmaterial = new THREE.MeshBasicMaterial();
-					var suncolor = new THREE.Color(0x6FFFF00);
-					sunmaterial.color.copy(suncolor);
+					sunmaterial.color.copy(new THREE.Color(suncolour));
 					var sun = new THREE.Mesh(sungeometry, sunmaterial);
 					sun.geometry.dynamic = true;
-					sun.position.y = -yposition;
+					sun.position.y = -sunyposition;
+					suns.push(sun);
 					scene.add(sun);		
 				}
 				
@@ -126,8 +136,7 @@
 				{
 					for (var i = 0; i< planets.length; i++)
 					{
-						planets[i].rotation.x += 0.01;
-						planets[i].rotation.y += 0.01;
+						planets[i].rotation.y += planetrotationspeeds[i];
 					}
 				}
 				
@@ -135,19 +144,17 @@
 				{
 					for (var i = 0; i< planets.length; i++)
 					{
-						planets[i].position.x = planetradii[i]*Math.sin(center);
-						planets[i].position.z = planetradii[i]*Math.cos(center);
+						planets[i].position.x = planetradii[i]*Math.sin(planetcentres[i]);
+						planets[i].position.z = planetradii[i]*Math.cos(planetcentres[i]);
+						planetcentres[i] += planetorbitspeeds[i];
 					}
-					center += 0.03;
 				}
 							
 				function animate()
 				{
 					requestAnimationFrame(animate);
-					
 					rotateAnimation();
 					orbitAnimation();
-
 					render();
 				}
 						
@@ -156,11 +163,20 @@
 					renderer.render(scene, camera);
 				}	
 				
+				init();
 				keyboardListener();
 				animate();
 				
 				//Test data
-				drawMultipleSunsAndPlanets(3, 4, 8, 4);
+				//drawMultipleSunsAndPlanets(3, 4, 8, 4);
+				
+				//Draw some suns
+				drawSun(0, 8, 0x6FFFF00);
+				drawSun(80, 12, 0x00CED1);
+				
+				//Draw some planets
+				drawPlanet(17, 0, 4, 0x2F4F4F , 0.05, 0.02);
+				drawPlanet(34, 0, 4, 0xD2691E, 0.01, 0.09);
 				
 		</script>
 	</body>
