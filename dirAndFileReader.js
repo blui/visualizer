@@ -1,5 +1,5 @@
 
-/* 
+/** 
 	Module: inputReader.js, directoryScanner.js (included)
 	Description: Basic file reader returns string of contents of a file from a set file name.
 				 Path of directory must be set manually.
@@ -11,7 +11,7 @@ var fs = require('fs'),
 	util = require('util');
 
 // Declare global variables for functions' use
-	var rootfolder = './node_modules/',
+	var rootfolder = './test_folder/',
 		filteredfiles = [],
 		files = [],
 		fileextension = '.java',

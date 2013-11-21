@@ -6,16 +6,75 @@
 	<body bgcolor="#000000">
 		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
 		<script>
+		
+		
 				var camera, scene, renderer; 
 				
 				//Planet and sun objects
-				var planets = new Array();
 				var suns = new Array();
 				
 				var planetradii = new Array();
 				var planetcentres = new Array();
 				var planetorbitspeeds = new Array();
 				var planetrotationspeeds = new Array();
+				
+				//Manually declare variables of dataSets from parser
+				//For class01 -> UIGroup
+				var class01 = ['UIGroup', 151, 'public', 'abstract'];
+				var planetsClass01 = [
+					['getDescriptor', 1, 'method'],
+					['getDisplayName', 1, 'method'],
+					['getDisplayDetails', 4, 'method'],
+					['setDisplayDetails', 4, 'method'],
+					['getSourceIndex', 1, 'method'],
+					['getParentGroup', 1, 'method'],
+					['isGroupCollapsed', 1, 'method'],
+					['countOnlineChildContacts', 1, 'method'],
+					['countChildContacts', 1, 'method'],
+					['getId', 1, 'method'],
+					['getRightButtonMenu', 1, 'method'],
+					['getPreferredHeight', 4, 'method'],
+					['setPreferredHeight', 4, 'method'],
+					['getCustomActionButtons', 4, 'method'],
+					['preferredGroupHeight', 1, 'variable'],
+					['displayDetails', 1, 'variable']
+				];
+				
+				//For class02 -> Container
+				var class02 = ['Container', 245, 'public', ''];
+				var planetsClass02 = [
+					['Container', 4, 'method'],
+					['getID', 4, 'method'],
+					['equals', 20, 'method'],
+					['CONTAINER_ID', 1, 'variable'],
+					['START', 1, 'variable'],
+					['END', 1, 'variable'],
+					['TOP', 1, 'variable'],
+					['BOTTOM', 1, 'variable'],
+					['LEFT', 1, 'variable'],
+					['RIGHT', 1, 'variable'],
+					['containerName', 1, 'variable']
+				];
+				
+				//For class03 -> UIContact
+				var class03 = ['UIContact', 140, 'public', 'abstract'];
+				var planetsClass03 = [
+					['getDescriptor', 1, 'method'],
+					['getDisplayName', 1, 'method'],
+					['getDisplayDetails', 1, 'method'],
+					['getSourceIndex', 1, 'method'],
+					['getToolTip', 1, 'method'],
+					['getRightButtonMenu', 1, 'method'],
+					['getParentGroup', 1, 'method'],
+					['setParentGroup', 1, 'method'],
+					['getSearchStrings', 1, 'method'],
+					['getDefaultContactDetail', 2, 'method'],
+					['getContactDetailsForOpterationSet', 2, 'method'],
+					['getContactDetails', 1, 'method'],
+					['getContactCustomActionButtons', 1, 'method'],
+					['getPreferredHeight', 4, 'method']
+				];
+				
 				
 				function init()
 				{
