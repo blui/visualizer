@@ -17,6 +17,8 @@
 				//Arrays for the planet rotation animations
 				var planetrotationspeeds = new Array();
 				
+				var spacingbetweenplanets = 27;
+				
 				//Manually declare variables of dataSets from parser
 				//For class01 -> UIGroup
 				var class01 = ['UIGroup', 151, 'private', 'abstract'];
@@ -166,8 +168,7 @@
 					var resolution = 100;
 					var size = 360 / resolution;
 					var linegeometry = new THREE.Geometry();
-					var linematerial = new THREE.LineBasicMaterial();
-					linematerial.color.copy(new THREE.Color(0xD3D3D3));		
+					var linematerial = new THREE.LineBasicMaterial({color:0xD3D3D3, transparent: true, opacity:0.2});
 						for(var i = 0; i <= resolution; i++) 
 						{
 						var segment = (i*size) * (Math.PI/180);
@@ -224,6 +225,27 @@
 					}
 				}
 				
+				//Function to determine planet size
+				function determinePlanetSize(numberoflines)
+				{
+					var size;
+					if (numberoflines/2 <1)
+					{
+						size=1;
+						return size;
+					}
+					else if (numberoflines/2 > 12)
+					{
+						size = 12;
+						return size;
+					}
+					else
+					{
+						size = (numberoflines/2);
+						return size;
+					}
+				}
+				
 				//Function to determine the colour of the planet based on whether it is a method or a variable
 				function  determinePlanetColour(type)
 				{
@@ -239,24 +261,11 @@
 					}
 				}
 				
-				//Function to determine the orbit speed based on whether the method is public, protected or private
-				function determinePlanetOrbitSpeed(type)
+				//Function to determine an orbit speed for each planet
+				function generateRandomOrbitSpeed()
 				{
-					if (type == 'public')
-					{
-						var speed = 0.05;
-						return speed;
-					}
-					else if (type == 'protected')
-					{
-						var speed = 0.025;
-						return speed;
-					}
-					else if (type == 'private')
-					{
-						var speed = 0.0375;
-						return speed;
-					}
+					var speed = ((Math.random()*0.015)+0.001);
+					return speed;		
 				}
 					
 				//Keyboard listener to move the camera around
@@ -361,25 +370,25 @@
 					renderer.render(scene, camera);
 				}	
 				
+				//Populate with data
+				function populatePlanets()
+				{
+					for (var i = 0; i < planetsClass04.length; i++) 
+					{
+					drawPlanet(spacingbetweenplanets+(i*spacingbetweenplanets), 0, determinePlanetSize(planetsClass04[i][1]), determinePlanetColour(planetsClass04[i][2]), generateRandomOrbitSpeed(), 0.06);
+					}
+				}
+				
 				init();
 				keyboardListener();
 				animate();
 								
 				//Draw a star
-				drawStar(16.5, 0);
+				//drawStar(16.5, 0);
 				
-				//Draw some suns
-				drawSun(0, determineSunSize(class01[1]), determineSunColour(class01[2]));				
-				
-				//Draw some planets
-				//drawPlanet(34, 0, planetsClass01[2][1], 0x2F4F4F , 0.05, 0.06);
-				//drawPlanet(34, 0, 4, 0xD2691E, 0.01, 0.09);
-				
-				for (var i = 0; i < planetsClass04.length; i++) 
-				{
-					drawPlanet(15+(i*15), 0, planetsClass04[i][1], determinePlanetColour(planetsClass04[i][2]), determinePlanetOrbitSpeed(planetsClass04[i][3]), 0.06);
-				}
-				drawManyRings(15);
+				drawSun(0, 15, determineSunColour(class01[2]));				
+				populatePlanets();
+				drawManyRings(spacingbetweenplanets);
 								
 		</script>
 	</body>
