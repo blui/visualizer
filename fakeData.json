@@ -4,7 +4,7 @@
         "Parent": "",
         "Type": "public",
         "Interfaces": [
-		],
+    	],
         "Modifies": [
             "abstract"
         ],
@@ -339,5 +339,139 @@
         },
         "Variables": {
 		}
+    },
+	"class04": {
+		"Name": "LazyConfigurationForm",
+		"Parent": "",
+		"Type": "public",
+		"Interfaces": [
+		],
+		"Modifies": [
+		],
+		"Authors": "yanas",
+		"Contributors": [
+			"yanas",
+			"lyubomir",
+			"emcho"
+		],
+		"Lines of code": 223,
+		"Number of loops": 2,
+		"Creation date": "December 19, 2008",
+		"Methods": {
+			"getResources": {
+			    "Type": "private",
+			    "Modifies": [
+				    "ResourceManagementService"
+			    ],
+			    "Lines": 8
+		    },
+		    "getForm": {
+			    "Type": "public",
+			    "Modifies": [
+				    "Object"
+			    ],
+			    "Lines": 23
+		    },
+		    "getFormClassLoader": {
+			    "Type": "protected",
+			    "Modifies": [
+				    "ClassLoader"
+			    ],
+			    "Lines": 4
+		    },
+		    "getFormClassName": {
+			    "Type": "public",
+			    "Modifies": [
+				    "String"
+			    ],
+			    "Lines": 4
+		    },
+		    "getIcon": {
+			    "Type": "public",
+			    "Modifies": [
+				    "byte"
+			    ],
+			    "Lines": 4
+		    },
+		    "getIconID": {
+			    "Type": "protected",
+			    "Modifies": [
+				    "String"
+			    ],
+			    "Lines": 4
+		    },
+		    "getIndex": {
+			    "Type": "public",
+			    "Modifies": [
+				    "int"
+			    ],
+			    "Lines": 4
+		    },
+		    "getTitle": {
+			    "Type": "public",
+			    "Modifies": [
+				    "String"
+			    ],
+			    "Lines": 4
+		    },
+		    "getTitleID": {
+			    "Type": "protected",
+			    "Modifies": [
+				    "String"
+			    ],
+			    "Lines": 4
+		    },
+		    "isAdvanced": {
+			    "Type": "public",
+			    "Modifies": [
+				    "boolean"
+			    ],
+			    "Lines": 4
+		    }
+	    },
+	    "Variables": {
+		    "resources": {
+			    "Type": "private",
+			    "Modifies": [
+				    "ResourceManagementService"
+			    ]
+		    },
+		    "formClassLoader": {
+			    "Type": "private",
+			    "Modifies": [
+				    "ClassLoader"
+			    ]
+		    },
+		    "formClassName": {
+			    "Type": "private",
+			    "Modifies": [
+				    "String"
+			    ]
+		    },
+		    "iconID": {
+			    "Type": "private",
+			    "Modifies": [
+				    "String"
+			    ]
+		    },
+		    "index": {
+			    "Type": "private",
+			    "Modifies": [
+				    "int"
+			    ]
+		    },
+		    "titleID": {
+			    "Type": "private",
+			    "Modifies": [
+				    "String"
+			    ]
+		    },
+		    "isAdvanced": {
+			    "Type": "private",
+			    "Modifies": [
+				    "boolean"
+			    ]
+		    }
+	    }
     }
 }
