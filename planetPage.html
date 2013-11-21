@@ -6,12 +6,15 @@
 	<body bgcolor="#000000">
 		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
 		<script>
-		
-		
 				var camera, scene, renderer; 
 				
 				//Planet and sun objects
 				var suns = new Array();
+				var planets = new Array();
+				var stars = new Array();
+				
+				var starsradii = new Array();
+				var starscentres  = new Array();
 				
 				var planetradii = new Array();
 				var planetcentres = new Array();
@@ -20,7 +23,7 @@
 				
 				//Manually declare variables of dataSets from parser
 				//For class01 -> UIGroup
-				var class01 = ['UIGroup', 151, 'public', 'abstract'];
+				var class01 = ['UIGroup', 151, 'private', 'abstract'];
 				var planetsClass01 = [
 					['getDescriptor', 1, 'method'],
 					['getDisplayName', 1, 'method'],
@@ -73,8 +76,7 @@
 					['getContactDetails', 1, 'method'],
 					['getContactCustomActionButtons', 1, 'method'],
 					['getPreferredHeight', 4, 'method']
-				];
-				
+				];				
 				
 				function init()
 				{
@@ -89,6 +91,18 @@
 				var light = new THREE.PointLight(0xffffff, 2);
 				light.position.set(0,0,80);
 				scene.add(light)
+				}
+				
+				//Draw a sun at a specific location with a specific size and colour
+				function drawSun(sunyposition, sunsize, suncolour)
+				{
+					var sungeometry = new THREE.SphereGeometry(sunsize,30,30);
+					var sunmaterial = new THREE.MeshPhongMaterial({color:suncolour, shininess: 12, specular: 0xdedeb2});
+					var sun = new THREE.Mesh(sungeometry, sunmaterial);
+					sun.geometry.dynamic = true;
+					sun.position.y = -sunyposition;
+					suns.push(sun);
+					scene.add(sun);		
 				}
 				
 				//Draw a planet for a given sun with a specific size and position
@@ -109,6 +123,21 @@
 					scene.add(planet);
 				}
 				
+				function drawStar(starxposition, sunyposition)
+				{
+					var stargeometry = new THREE.OctahedronGeometry(1.5, 0);
+					var starmaterial = new THREE.MeshPhongMaterial();
+					starmaterial.color.copy(new THREE.Color(0xFFFFFF));
+					var star = new THREE.Mesh(stargeometry, starmaterial);
+					star.geometry.dynamic = true;
+					star.position.x = starxposition;
+					star.position.y = sunyposition;
+					stars.push(star);
+					starsradii.push(starxposition);
+					starscentres.push(0);
+					scene.add(star);
+				}
+				
 				//Draw many planets for a given sun with a specific size spaced evenly apart
 				function drawMultiplePlanets(numberofplanets, sunyposition, planetsize)
 				{
@@ -118,18 +147,6 @@
 					}
 				}				
 					
-				//Draw a sun at a specific location with a specific size and colour
-				function drawSun(sunyposition, sunsize, suncolour)
-				{
-					var sungeometry = new THREE.SphereGeometry(sunsize,30,30);
-					var sunmaterial = new THREE.MeshPhongMaterial({color:suncolour, shininess: 12, specular: 0xdedeb2});
-					var sun = new THREE.Mesh(sungeometry, sunmaterial);
-					sun.geometry.dynamic = true;
-					sun.position.y = -sunyposition;
-					suns.push(sun);
-					scene.add(sun);		
-				}
-				
 				function drawMultipleSunsAndPlanets(numberofclasses, numberofplanets, sunsize, planetsize)
 				{
 					for (var i=0; i<numberofclasses; i++)
@@ -138,6 +155,42 @@
 						drawMultiplePlanets(numberofplanets, -(i*150), planetsize);
 					}
 				}	
+				
+				function determineSunSize (numberoflines)
+				{
+					var size = (numberoflines/20);
+					if (size > 15)
+					{
+						return size = 15;
+					}
+					else if (size < 1)
+					{
+						return size = 1;
+					}
+					else
+					{
+						return size;
+					}
+				}
+				
+				function  determineSunColour (classtype)
+				{
+					if (classtype == "public")
+					{	
+						var colour = 0xFFFFFF;
+						return colour;
+					}
+					else if (classtype == "protected")
+					{
+						var colour = 0xFFFF00;
+						return colour;
+					}
+					else
+					{
+						var colour = 0xFF4500;
+						return colour;
+					}
+				}
 	
 				function keyboardListener()
 				{
@@ -201,7 +254,7 @@
 					}
 				}
 				
-				function orbitAnimation()
+				function planetOrbitAnimation()
 				{
 					for (var i = 0; i< planets.length; i++)
 					{
@@ -210,12 +263,23 @@
 						planetcentres[i] += planetorbitspeeds[i];
 					}
 				}
+				
+				function starOrbitAnimation()
+				{
+					for (var i = 0; i< stars.length; i++)
+					{
+						stars[i].position.x = starsradii[i]*Math.sin(starscentres[i]);
+						stars[i].position.y = starsradii[i]*Math.cos(starscentres[i]);
+						starscentres[i] += 2;
+					}
+				}
 							
 				function animate()
 				{
 					requestAnimationFrame(animate);
 					rotateAnimation();
-					orbitAnimation();
+					planetOrbitAnimation();
+					starOrbitAnimation();
 					render();
 				}
 						
@@ -231,12 +295,15 @@
 				//Test data
 				//drawMultipleSunsAndPlanets(3, 4, 8, 4);
 				
+				//Draw a star
+				drawStar(16.5, 0);
+				
 				//Draw some suns
-				drawSun(0, 8, 0xFFFF00);				
+				drawSun(0, determineSunSize(class01[1]), determineSunColour(class01[2]));				
 				
 				//Draw some planets
-				drawPlanet(17, 0, 4, 0x2F4F4F , 0.05, 0.06);
-				drawPlanet(34, 0, 4, 0xD2691E, 0.01, 0.09);
+				drawPlanet(34, 0, planetsClass01[2][1], 0x2F4F4F , 0.05, 0.06);
+				//drawPlanet(34, 0, 4, 0xD2691E, 0.01, 0.09);
 				
 		</script>
 	</body>
