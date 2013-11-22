@@ -179,7 +179,7 @@
 				}
 				
 				//Function to draw many rings based on the spacing between the planets
-				function drawManyRings(spacing)
+				function createOrbitRings(spacing)
 				{
 					for (var i = 0; i < planets.length; i++)
 					{
@@ -210,7 +210,7 @@
 				{
 					if (classtype == "public")
 					{	
-						var colour = 0xFFFFFF;
+						var colour = 0xFF4500;
 						return colour;
 					}
 					else if (classtype == "protected")
@@ -220,7 +220,7 @@
 					}
 					else
 					{
-						var colour = 0xFF4500;
+						var colour = 0xFFFFFF;
 						return colour;
 					}
 				}
@@ -370,12 +370,18 @@
 					renderer.render(scene, camera);
 				}	
 				
-				//Populate with data
-				function populatePlanets()
+				//Make a sun for a class
+				function createSunForClass(classname)
 				{
-					for (var i = 0; i < planetsClass04.length; i++) 
+					drawSun(0, determineSunSize(classname[1]), determineSunColour(classname[2]));				
+				}
+				
+				//Make planets for a class
+				function createPlanetsForClass(classname)
+				{
+					for (var i = 0;i < classname.length; i++)
 					{
-					drawPlanet(spacingbetweenplanets+(i*spacingbetweenplanets), 0, determinePlanetSize(planetsClass04[i][1]), determinePlanetColour(planetsClass04[i][2]), generateRandomOrbitSpeed(), 0.06);
+					drawPlanet(spacingbetweenplanets+(i*spacingbetweenplanets), 0, determinePlanetSize(classname[i][1]), determinePlanetColour(classname[i][2]), generateRandomOrbitSpeed(), 0.06);
 					}
 				}
 				
@@ -386,10 +392,11 @@
 				//Draw a star
 				//drawStar(16.5, 0);
 				
-				drawSun(0, 15, determineSunColour(class01[2]));				
-				populatePlanets();
-				drawManyRings(spacingbetweenplanets);
-								
+				//Test for class 4
+				createSunForClass(class03);
+				createPlanetsForClass(planetsClass03);
+				createOrbitRings(spacingbetweenplanets);
+				
 		</script>
 	</body>
 </html>
