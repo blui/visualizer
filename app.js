@@ -11,6 +11,7 @@ var express = require('express'),
 
 // Declare module dependencies (functions we made)
 var reader = require('./dirAndFileReader.js');
+var parser = require('./parser.js');
 
 // Create a new application app with express()
 var app = express();
@@ -44,9 +45,12 @@ app.get('/', function (req, res) {
 
 // Load directory and file reader to variable display for testing purposes
 var filePaths = reader.dirRead();
+var filesReaded = reader.fileRead(filePaths);
+var singleFile = filesReaded[0];
+var parsedFile = parser.parser(singleFile);
 // Define a new route for app for displaying reader results
 app.get('/reader', function(req, res) {
-	res.send(reader.fileRead(filePaths))
+	res.send(parsedFile)
 });
 
 // Bind and listen to connections

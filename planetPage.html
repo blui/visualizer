@@ -5,7 +5,29 @@
 	</head>
 	<body bgcolor="#000000">
 		<script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+		<script src="fakeData.json"></script>
 		<script>
+					
+				function load() {
+					var myData = JSON.parse(data);
+					return myData;
+				}
+				
+				var systemArray = load(),
+					classArray = new Array(),
+					planetsClassArray = new Array();
+				
+				
+				
+				for(var i = 0; i < systemArray.length; i++) {
+					classArray[i][0].push(systemArray[i].Name);
+					classArray[i][1].push(systemArray[i].LinesOfCode);
+					classArray[i][2].push(systemArray[i].Type);
+				}
+				
+				
+				
+					
 				var camera, scene, renderer; 
 				
 				//Arrays for the planet and sun objects
@@ -388,8 +410,8 @@
 				init();
 				keyboardListener();
 				animate();
-								
-				//Draw a star
+				
+					//Draw a star
 				//drawStar(16.5, 0);
 				
 				//Test for class 4
