@@ -17,6 +17,8 @@
 				//Arrays for the planet rotation animations
 				var planetrotationspeeds = new Array();
 				
+				var sunTexture = THREE.ImageUtils.loadTexture('sunTexture.gif', new THREE.UVMapping(), function() {renderer.render(scene);});
+
 				var spacingbetweenplanets = 27;
 				var spacingbetweensolarsystems = 500;
 				
@@ -212,6 +214,16 @@
 					var light = new THREE.PointLight(0xffffff, 2);
 					light.position.set(0,0,80);
 					scene.add(light)
+				}
+				
+				function drawSpaceship ()
+				{
+					var spaceshipmaterial = new THREE.MeshBasicMaterial({ map: sunTexture});
+					var spaceshipgeometry = new THREE.SphereGeometry(10,30,30);
+					var spaceship = new THREE.Mesh(spaceshipgeometry, spaceshipmaterial);
+					spaceship.position.x = 20;
+					spaceship.position.y = 20;
+					scene.add(spaceship);
 				}
 				
 				//Draw a sun at a specific location with a specific size and colour
@@ -510,8 +522,9 @@
 								
 				//Draw a star
 				//drawStar(16.5, 0);
-				
 				makeSolarSystems();	
+				
+				drawSpaceship();
 		</script>
 	</body>
 </html>
