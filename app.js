@@ -1,57 +1,73 @@
 
-/** 
-	Module: app.js
-	Description: Main js class where all modules run
+/**
+ * app runs all modules supported
+ *
+ * Authors: Brian Lui, Tommy Chien
+ *
+ * When run, app is able to integrate dirAndFileReader and parser
+ * modules together to produce files that are scanned, then parsed
  */
+ 
+/*
+ * Define module dependencies (node/npm)
+ */
+var express = require('express');
 
-// Declare node.js module dependencies (from npmjs.org)
-var express = require('express'),
-	stylus = require('stylus'), 
-	nib = require('nib');
-
-// Declare module dependencies (functions we made)
+/*
+ * Define module dependencies created by us
+ */
 var reader = require('./dirAndFileReader.js');
 var parser = require('./parser.js');
 
-// Create a new application app with express()
+/* 
+ * Instantiate the application
+ */
 var app = express();
 
-// Declare the use of Jade and Stylus
-function compile(str, path) {
-  return stylus(str)
-    .set('filename', path)
-    .use(nib())
-}
+// ------------------- dirAndFileReader logic ------------------------
 
-// Setting the views directory
-// Declaring we are using the engine Jade to pump out views
-// Declaring the use of middle-ware Stylus
-app.set('views', __dirname + '/views')
-app.set('view engine', 'jade')
-app.use(express.logger('dev'))
-app.use(stylus.middleware(
-  { src: __dirname + '/public'
-  , compile: compile
-  }
-))
-app.use(express.static(__dirname + '/public'));
-
-// Declare a base route for Jade to display view contents
-app.get('/', function (req, res) {
-  res.render('index',
-  { title : 'Home' }
-  )
-})
-
-// Load directory and file reader to variable display for testing purposes
+// Store contents of read directory (and subdirectories) with formatted 
+// file paths into array filePaths
 var filePaths = reader.dirRead();
+// Store contents of files read into array filesReaded 
 var filesReaded = reader.fileRead(filePaths);
-var singleFile = filesReaded[0];
-var parsedFile = parser.parser(singleFile);
-// Define a new route for app for displaying reader results
+// To check contents of files, display them in a new route from app 
 app.get('/reader', function(req, res) {
-	res.send(parsedFile)
+	res.send(filesReaded);
 });
+
+var singleFile = filesReaded[4];
+console.log(singleFile.toString());
+//console.log('Indicator1: ' + typeof singleFile);
+var parsedFile = parser.parser(singleFile);
+//console.log('Indicator2: ' + typeof parsedFile);
+console.log(parsedFile);
+
+// ------------------- parser logic ----------------------------------
+
+// Create: - arrayAllParsed: array to store contents of all parsed files 
+// 		   - singleParsed: temp. place-holder for single file's parsed output
+//         - singleFile: temp. place-holder for singleFile's content
+/* var arrayAllParsed = new Array(),
+	singleParsed,
+	singleFile;
+// Use a loop to traverse through an array of file contents to parse
+// entries one by one
+for(var i = 0; i < filesReaded.length; i++) {
+	// Place-holder for contents of file i
+	singleFile = filesReaded[i];
+	// Place-holder for contents of parsed file i
+	singleParsed = parser.parser(singleFile);
+	// Throw parsed contents of file i to arrayAllParsed
+	arrayAllParsed.push(singleParsed);
+	// De-bugging purposes to indicate files are actually being parsed
+	console.log('File #: ' + i + ' parsed.');
+} */
+
+/* // Define a new route for app for displaying reader results
+app.get('/parser', function(req, res) {
+	res.send(parsedFile);;
+}); */
 
 // Bind and listen to connections
 app.listen(3000);

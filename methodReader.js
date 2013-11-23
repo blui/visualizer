@@ -1,6 +1,19 @@
- // Declare module dependencies
-var methodModifiersExtract = require('./methodModifiersExtract.js')
+/**
+ * Input: a text file that represents a class
+ *
+ * Returns: methodArray(methodName, modifiers, lines of code, number of loops, variables)
+ * FYI variables(variableName, constructor, modifiers)
+ */ 
 
+// Declare module dependencies
+var methodModifiersExtract = require('./methodModifiersExtract.js')
+var lineCounter = require('./lineCounter.js')
+var methodEnd = require('./methodEnd.js')
+var loopCounter = require('./loopCounter.js')
+
+// the array being returned:
+// methodArray(methodName, modifiers, lines of code, number of loops, variable array)
+// variables(variableName, constructor, modifiers)
 var methodArray = new Array();	
 var method = new Array();	
 var variableArray = new Array();
@@ -17,102 +30,331 @@ var eposM = 0;
 var index = 0;
 var modifiers = new Array();
 var modifiersV = new Array();
+var endMethodNumber = 0;
+var numberOfLines = 0;
+var numberOfLoops = 0;
 
 // Define module to be exported as a function(s)
 module.exports = {
 	methodReader: function(text, i) {
-			methodArray = new Array();
-			index = i;
-			while(text.indexOf('public', index) != -1){
-				method = new Array();
-				variable = new Array();
-				index = text.indexOf('public', index);
+		//clear the array to new method
+		methodArray = new Array();
+		index = i;
+		//finds all the public methods or variables first
+		while(text.indexOf('public', index) != -1){
+			method = new Array();
+			variable = new Array();
+			index = text.indexOf('public', index);
+			if (text.indexOf('(', index) != -1 && text.indexOf(';', index) != -1){
+				//checks if it's a method or variable by checking if ; or ( is closer to 'public'
 				if (text.indexOf('(', text.indexOf('public', index)) > text.indexOf(';', text.indexOf('public', index))){
-				sposM = text.indexOf('public', index);
-				eposM = text.indexOf(';', sposM);
-				variableName = text.substring(sposM, eposM);
-				modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);	
-				variableName = modifiersV.pop();
-				variable.push(variableName);
-				variableConstructor = modifiersV.pop();
-				variable.push(variableConstructor);
-				variable.push(modifiersV);
-				variableArray.push(variable);
-				index = eposM + 1;
+					// sets the starting and ending points for the whole line of variable
+					sposM = text.indexOf('public', index);
+					eposM = text.indexOf(';', sposM);
+					// extracts the line with variable in it eg: public abstract int num;
+					variableName = text.substring(sposM, eposM);
+					// extracts the modifiers into separate words public, abstract, int, num
+					console.log('should not be called');
+					modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);	
+					// grabs the last item of modifers which is the variable name : num, then remove from modifiers
+					variableName = modifiersV.pop();
+					variable.push(variableName);
+					// grabs the second last modifiers which is the constructor: int, then remove from modifiers
+					variableConstructor = modifiersV.pop();
+					variable.push(variableConstructor);
+					// throws the rest of the modifiers in 
+					variable.push(modifiersV);
+					variableArray.push(variable);
+					//index set to the end of current variable
+					index = eposM + 1;
+					}
+				else if(text.indexOf('(', text.indexOf('public', index)) < text.indexOf(';', text.indexOf('public', index))){
+					// sets the starting and ending points for the whole line of method
+					sposM = text.indexOf('public', index);
+					eposM = text.indexOf('(', sposM);
+					// extracts the line with variable in it eg: public abstract static findMax;
+					methodName = text.substring(sposM, eposM);
+					// extracts the modifiers, including method name, into separate words public, abstract, static, findMax
+					modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
+					// grabs last item of modifiers, the name of method - findMax then remove from modifiers
+					methodName = modifiers.pop();
+					method.push(methodName);
+					// throws the rest of the modifiers in 				
+					method.push(modifiers);
+					methodArray.push(method);	
+					//index set to the end of current variable				
+					index = eposM + 1;
+					// finds index of the end of the method
+					endMethodNumber = methodEnd.methodEnd(text, index);
+					// finds number of lines in method
+					numberOfLines = lineCounter.lineCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLines);
+					// finds number of loops in method
+					numberOfLoops = loopCounter.loopCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLoops);	
 				}
-				else if (text.indexOf('(', text.indexOf('public', index)) < text.indexOf(';', text.indexOf('public', index))){
-				sposM = text.indexOf('public', index);
-				eposM = text.indexOf('(', sposM);
-				methodName = text.substring(sposM, eposM);
-				modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
-				methodName = modifiers.pop();
-				method.push(methodName);
-				method.push(modifiers);
-				methodArray.push(method);			
-				index = eposM + 1;
-				}
-			}	
-			index = i;		
-			while(text.indexOf('private', index) != -1){
-				method = new Array();
-				variable = new Array();				
-				index = text.indexOf('private', index);
+			}
+			else if (text.indexOf('(', index) != -1) {
+					// sets the starting and ending points for the whole line of method
+					sposM = text.indexOf('public', index);
+					eposM = text.indexOf('(', sposM);
+					// extracts the line with variable in it eg: public abstract static findMax;
+					methodName = text.substring(sposM, eposM);
+					// extracts the modifiers, including method name, into separate words public, abstract, static, findMax
+					modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
+					// grabs last item of modifiers, the name of method - findMax then remove from modifiers
+					methodName = modifiers.pop();
+					method.push(methodName);
+					// throws the rest of the modifiers in 				
+					method.push(modifiers);
+					methodArray.push(method);	
+					//index set to the end of current variable				
+					index = eposM + 2;
+					// finds index of the end of the method
+					endMethodNumber = methodEnd.methodEnd(text, index);
+					// finds number of lines in method
+					numberOfLines = lineCounter.lineCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLines);
+					// finds number of loops in method
+					numberOfLoops = loopCounter.loopCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLoops);
+			}
+			else if(text.indexOf(';', index) != -1){
+					console.log('should happen - just var');
+					// sets the starting and ending points for the whole line of variable
+					sposM = text.indexOf('public', 0);
+					eposM = text.indexOf(';', sposM);
+					// extracts the line with variable in it eg: public abstract int num;
+					variableName = text.substring(sposM, eposM);
+					console.log(variableName);					
+					// extracts the modifiers into separate words public, abstract, int, num
+					modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);
+					//console.log(modifiersV);										
+					// grabs the last item of modifers which is the variable name : num, then remove from modifiers
+					variableName = modifiersV.pop();
+					console.log(variableName);										
+					variable.push(variableName);
+					// grabs the second last modifiers which is the constructor: int, then remove from modifiers
+					variableConstructor = modifiersV.pop();
+					variable.push(variableConstructor);
+					// throws the rest of the modifiers in 
+					variable.push(modifiersV);
+					variableArray.push(variable);
+					//index set to the end of current variable
+					index = eposM + 1;
+			}
+		}
+		index = i;
+		//finds all the private methods or variables first
+		while(text.indexOf('private', index) != -1){
+			method = new Array();
+			variable = new Array();
+			index = text.indexOf('private', index);
+			if (text.indexOf('(', index) != -1 && text.indexOf(';', index) != -1){
+				//checks if it's a method or variable by checking if ; or ( is closer to 'private'
 				if (text.indexOf('(', text.indexOf('private', index)) > text.indexOf(';', text.indexOf('private', index))){
-				sposM = text.indexOf('private', index);
-				eposM = text.indexOf(';', sposM);
-				variableName = text.substring(sposM, eposM);
-				modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);	
-				variableName = modifiersV.pop();
-				variable.push(variableName);
-				variableConstructor = modifiersV.pop();
-				variable.push(variableConstructor);
-				variable.push(modifiersV);
-				variableArray.push(variable);
-				index = eposM + 1;
-				}
-				else if (text.indexOf('(', text.indexOf('private', index)) < text.indexOf(';', text.indexOf('private', index))){
-				sposM = text.indexOf('private', index);
-				eposM = text.indexOf('(', sposM);
-				methodName = text.substring(sposM, eposM);
-				modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
-				methodName = modifiers.pop();				
-				method.push(methodName);
-				method.push(modifiers);
-				methodArray.push(method);	
-				index = eposM + 1;
+					// sets the starting and ending points for the whole line of variable
+					sposM = text.indexOf('private', index);
+					eposM = text.indexOf(';', sposM);
+					// extracts the line with variable in it eg: private abstract int num;
+					variableName = text.substring(sposM, eposM);
+					// extracts the modifiers into separate words private, abstract, int, num
+					console.log('should not be called');
+					modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);	
+					// grabs the last item of modifers which is the variable name : num, then remove from modifiers
+					variableName = modifiersV.pop();
+					variable.push(variableName);
+					// grabs the second last modifiers which is the constructor: int, then remove from modifiers
+					variableConstructor = modifiersV.pop();
+					variable.push(variableConstructor);
+					// throws the rest of the modifiers in 
+					variable.push(modifiersV);
+					variableArray.push(variable);
+					//index set to the end of current variable
+					index = eposM + 1;
+					}
+				else if(text.indexOf('(', text.indexOf('private', index)) < text.indexOf(';', text.indexOf('private', index))){
+					// sets the starting and ending points for the whole line of method
+					sposM = text.indexOf('private', index);
+					eposM = text.indexOf('(', sposM);
+					// extracts the line with variable in it eg: private abstract static findMax;
+					methodName = text.substring(sposM, eposM);
+					// extracts the modifiers, including method name, into separate words private, abstract, static, findMax
+					modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
+					// grabs last item of modifiers, the name of method - findMax then remove from modifiers
+					methodName = modifiers.pop();
+					method.push(methodName);
+					// throws the rest of the modifiers in 				
+					method.push(modifiers);
+					methodArray.push(method);	
+					//index set to the end of current variable				
+					index = eposM + 1;
+					// finds index of the end of the method
+					endMethodNumber = methodEnd.methodEnd(text, index);
+					// finds number of lines in method
+					numberOfLines = lineCounter.lineCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLines);
+					// finds number of loops in method
+					numberOfLoops = loopCounter.loopCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLoops);	
 				}
 			}
-			index = i;		
-			while(text.indexOf('protected', index) != -1){
-				method = new Array();
-				variable = new Array();
-				index = text.indexOf('protected', index);
+			else if (text.indexOf('(', index) != -1) {
+					// sets the starting and ending points for the whole line of method
+					sposM = text.indexOf('private', index);
+					eposM = text.indexOf('(', sposM);
+					// extracts the line with variable in it eg: private abstract static findMax;
+					methodName = text.substring(sposM, eposM);
+					// extracts the modifiers, including method name, into separate words private, abstract, static, findMax
+					modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
+					// grabs last item of modifiers, the name of method - findMax then remove from modifiers
+					methodName = modifiers.pop();
+					method.push(methodName);
+					// throws the rest of the modifiers in 				
+					method.push(modifiers);
+					methodArray.push(method);	
+					//index set to the end of current variable				
+					index = eposM + 2;
+					// finds index of the end of the method
+					endMethodNumber = methodEnd.methodEnd(text, index);
+					// finds number of lines in method
+					numberOfLines = lineCounter.lineCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLines);
+					// finds number of loops in method
+					numberOfLoops = loopCounter.loopCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLoops);
+			}
+			else if(text.indexOf(';', index) != -1){
+					console.log('should happen - just var');
+					// sets the starting and ending points for the whole line of variable
+					sposM = text.indexOf('private', 0);
+					eposM = text.indexOf(';', sposM);
+					// extracts the line with variable in it eg: private abstract int num;
+					variableName = text.substring(sposM, eposM);
+					console.log(variableName);					
+					// extracts the modifiers into separate words private, abstract, int, num
+					modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);
+					//console.log(modifiersV);										
+					// grabs the last item of modifers which is the variable name : num, then remove from modifiers
+					variableName = modifiersV.pop();
+					console.log(variableName);										
+					variable.push(variableName);
+					// grabs the second last modifiers which is the constructor: int, then remove from modifiers
+					variableConstructor = modifiersV.pop();
+					variable.push(variableConstructor);
+					// throws the rest of the modifiers in 
+					variable.push(modifiersV);
+					variableArray.push(variable);
+					//index set to the end of current variable
+					index = eposM + 1;
+			}
+		}
+		index = i;
+		//finds all the protected methods or variables first
+		while(text.indexOf('protected', index) != -1){
+			method = new Array();
+			variable = new Array();
+			index = text.indexOf('protected', index);
+			if (text.indexOf('(', index) != -1 && text.indexOf(';', index) != -1){
+				//checks if it's a method or variable by checking if ; or ( is closer to 'protected'
 				if (text.indexOf('(', text.indexOf('protected', index)) > text.indexOf(';', text.indexOf('protected', index))){
-				sposM = text.indexOf('protected', index);
-				eposM = text.indexOf(';', sposM);
-				variableName = text.substring(sposM, eposM);
-				modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);	
-				variableName = modifiersV.pop();
-				variable.push(variableName);
-				variableConstructor = modifiersV.pop();
-				variable.push(variableConstructor);
-				variable.push(modifiersV);
-				variableArray.push(variable);
-				index = eposM + 1;
+					// sets the starting and ending points for the whole line of variable
+					sposM = text.indexOf('protected', index);
+					eposM = text.indexOf(';', sposM);
+					// extracts the line with variable in it eg: protected abstract int num;
+					variableName = text.substring(sposM, eposM);
+					// extracts the modifiers into separate words protected, abstract, int, num
+					console.log('should not be called');
+					modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);	
+					// grabs the last item of modifers which is the variable name : num, then remove from modifiers
+					variableName = modifiersV.pop();
+					variable.push(variableName);
+					// grabs the second last modifiers which is the constructor: int, then remove from modifiers
+					variableConstructor = modifiersV.pop();
+					variable.push(variableConstructor);
+					// throws the rest of the modifiers in 
+					variable.push(modifiersV);
+					variableArray.push(variable);
+					//index set to the end of current variable
+					index = eposM + 1;
+					}
+				else if(text.indexOf('(', text.indexOf('protected', index)) < text.indexOf(';', text.indexOf('protected', index))){
+					// sets the starting and ending points for the whole line of method
+					sposM = text.indexOf('protected', index);
+					eposM = text.indexOf('(', sposM);
+					// extracts the line with variable in it eg: protected abstract static findMax;
+					methodName = text.substring(sposM, eposM);
+					// extracts the modifiers, including method name, into separate words protected, abstract, static, findMax
+					modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
+					// grabs last item of modifiers, the name of method - findMax then remove from modifiers
+					methodName = modifiers.pop();
+					method.push(methodName);
+					// throws the rest of the modifiers in 				
+					method.push(modifiers);
+					methodArray.push(method);	
+					//index set to the end of current variable				
+					index = eposM + 1;
+					// finds index of the end of the method
+					endMethodNumber = methodEnd.methodEnd(text, index);
+					// finds number of lines in method
+					numberOfLines = lineCounter.lineCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLines);
+					// finds number of loops in method
+					numberOfLoops = loopCounter.loopCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLoops);	
 				}
-				else if (text.indexOf('(', text.indexOf('protected', index)) < text.indexOf(';', text.indexOf('protected', index))){
-				sposM = text.indexOf('protected', index);
-				eposM = text.indexOf('(', sposM);
-				methodName = text.substring(sposM, eposM);
-				modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
-				methodName = modifiers.pop();				
-				method.push(methodName);
-				method.push(modifiers);
-				methodArray.push(method);	
-				index = eposM + 1;
-				}
-			}			
-			methodArray.push(variableArray);			
-			return methodArray;		
 			}
+			else if (text.indexOf('(', index) != -1) {
+					// sets the starting and ending points for the whole line of method
+					sposM = text.indexOf('protected', index);
+					eposM = text.indexOf('(', sposM);
+					// extracts the line with variable in it eg: protected abstract static findMax;
+					methodName = text.substring(sposM, eposM);
+					// extracts the modifiers, including method name, into separate words protected, abstract, static, findMax
+					modifiers = methodModifiersExtract.methodModifiersExtract(methodName);	
+					// grabs last item of modifiers, the name of method - findMax then remove from modifiers
+					methodName = modifiers.pop();
+					method.push(methodName);
+					// throws the rest of the modifiers in 				
+					method.push(modifiers);
+					methodArray.push(method);	
+					//index set to the end of current variable				
+					index = eposM + 2;
+					// finds index of the end of the method
+					endMethodNumber = methodEnd.methodEnd(text, index);
+					// finds number of lines in method
+					numberOfLines = lineCounter.lineCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLines);
+					// finds number of loops in method
+					numberOfLoops = loopCounter.loopCounter(text.substring(text.indexOf('{', eposM), endMethodNumber));
+					methodArray.push(numberOfLoops);
+			}
+			else if(text.indexOf(';', index) != -1){
+					console.log('should happen - just var');
+					// sets the starting and ending points for the whole line of variable
+					sposM = text.indexOf('protected', 0);
+					eposM = text.indexOf(';', sposM);
+					// extracts the line with variable in it eg: protected abstract int num;
+					variableName = text.substring(sposM, eposM);
+					console.log(variableName);					
+					// extracts the modifiers into separate words protected, abstract, int, num
+					modifiersV = methodModifiersExtract.methodModifiersExtract(variableName);
+					//console.log(modifiersV);										
+					// grabs the last item of modifers which is the variable name : num, then remove from modifiers
+					variableName = modifiersV.pop();
+					console.log(variableName);										
+					variable.push(variableName);
+					// grabs the second last modifiers which is the constructor: int, then remove from modifiers
+					variableConstructor = modifiersV.pop();
+					variable.push(variableConstructor);
+					// throws the rest of the modifiers in 
+					variable.push(modifiersV);
+					variableArray.push(variable);
+					//index set to the end of current variable
+					index = eposM + 1;
+			}
+		}		
+		methodArray.push(variableArray);			
+		return methodArray;		
+		}
 };

@@ -1,13 +1,17 @@
-// Define module to be exported as a function(s)
-
-// public class Register extends ActionSupport implements ModelDriven
-
+/**
+ * Input: a string that represents class name
+ *
+ * Returns: an array of interface(s)
+ */ 
+ 
 var spos = 0;
 var epos = 0;
 var interfaces = '';
 var interfaceNames = new Array();
 
+// Define module to be exported as a function(s)
 module.exports = {
+	// find the word implements and every interface(s) that follows it by splitting by ',' (if any) 
 	classInterfaceExtract: function(text) {
 			spos = text.indexOf('implements') + 11;
 			epos = text.length;
