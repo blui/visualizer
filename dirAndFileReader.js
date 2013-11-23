@@ -1,46 +1,78 @@
 
-/** 
-	Module: inputReader.js, directoryScanner.js (included)
-	Description: Basic file reader returns string of contents of a file from a set file name.
-				 Path of directory must be set manually.
+/**
+ * dirAndFileReade module exported.
+ *
+ * Authors: Brian Lui, Miki Gataric
+ *
+ * Returns 2 functions; dirRead and fileRead
+ * 	dirRead: Given a parameter rootfolder, returns an array of files filtered (.java)
+ *	         within rootfolder formatted with full paths.
+ *	fileRead: Given a formatted path of files, returns an array of file contents
+ *			  formatted as strings of text
  */
  
-// Declare node.js module dependencies from API
+/*
+ * Define module dependencies (node/npm)	
+ */
 var fs = require('fs'), 
 	wrench = require('wrench'),
 	util = require('util');
 
-// Declare global variables for functions' use
-	var rootfolder = './test_folder/',
-		filteredfiles = [],
-		files = [],
+/* 
+ * Declare global variables for functions' use
+ */
+	var rootfolder = './filesToParse/',
+		filteredfiles = new Array(),
+		files = new Array(),
 		fileextension = '.java',
-		contents = [];
-	
-// Define module to be exported as a functions
-// dirRead function to scan directories and sub-directories for file paths and
-// fileRead function to read in files given by dirRead, stored into array.
+		contents = new Array();
+		index = 0;
+
+/* 
+ * Define functions to be exported as a module
+ * 		dirRead() function
+ * 		fileRead() function
+ */
 module.exports = {
 	dirRead: function() {
+		// Traverse through subdirectories of rootfolder recursively
 		files = wrench.readdirSyncRecursive(rootfolder)
 		for (var i = 0; i<files.length; i++) { 
-			// Filters files by extension declared
+			// Filters files by extension user wants (.java)
 			if (files[i].indexOf(fileextension) != -1) { 
+				// Push .java file-paths onto array
 				filteredfiles.push(files[i]);
 			}
 		}
-		// Returns array of filteredfiles for use
+		// Returns array of filteredfiles with formatted paths
 		return filteredfiles;
 	},
 
 	fileRead: function() {
-		// Call synchronous fileSystem function readFileSync on file name
+		// Loop over all contents of filteredfiles (reads all files user needs)
 		for(i = 0; i<filteredfiles.length; i++) {
-			// Pass in a rootfolder and path to the specific files in a loop
+			// Read file contents synchronously; parameter as formatted file-path
 			var temp = fs.readFileSync(rootfolder + filteredfiles[i].toString(), 'utf8')
+			// Index out the comments and return content without it
+			var j = 0;
+			while (temp.match('//*') || temp.match('//')) {
+				if (temp.match('//*')) { 
+					var sposC = temp.indexOf('/*');
+					var eposC = temp.indexOf('*/') + 2; }
+				else {
+					var sposC = temp.indexOf('//');
+					var eposC = temp.indexOf('/n');
+					}
+				tempSub = temp.substring(sposC, eposC);
+				temp = temp.replace(tempSub, '');		
+				//var temp = temp.replace(/([^\/"']+|"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|\/\*(?:[^*]|\*+[^*\/])*\*+\/|\/\/.*/, '');
+			}
+			// Push contents of files into array
 			contents.push(temp);
+			// Used for debugging; indicates files read during process
+			console.log('File: ' + rootfolder + filteredfiles[i].toString() + ' read.')
 		}
-		// Returns array of contents
+		// Returns array containing contents of files
 		return contents;
 	}
 };

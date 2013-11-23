@@ -1,28 +1,26 @@
 /**
- * PROPOSED format of INPUTs, they should be array containing arrays/texts
+ * Input: a text file that represents a class
  *
- * Returns...hierarchyArray(classArray, classArray, classArray...)
- * classArray(className, parent, interface(s), lines of code, number of loops, modifiers, methodArray, variableArray, authors)
- * methodArray(methodName, modifiers)
+ * Returns...classArray(class, class, class...)
+ * class(className, parent, interface(s), lines of code, number of loops, modifiers, methodArray, variableArray, authors)
+ * methodArray(methodName, modifiers, lines of code, number of loops)
  * variables(variableName, constructor, modifiers)
+ *
  */
  
  // Declare module dependencies
 var classReader = require('./classReader.js')
 
- // Define module to be exported as a function fileRead()
+ // Define module to be exported as a function parser(text)
 module.exports = {
 	parser: function(text) {
 		// output returned by parser
-		var hierarchyArray = new Array();
 		// classArray returned by classReader
 		var classArray = new Array();
-		// files being parsed
-		// contents of classArray
+		// index set to 0 to start parsing at first position for each file
 		var index = 0;
 		classArray = classReader.classReader(text, index);
-		hierarchyArray.push(classArray);
-		return hierarchyArray;
-
+		console.log('class returned');
+		return classArray;
 }
 };

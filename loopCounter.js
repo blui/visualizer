@@ -1,11 +1,17 @@
-// Define module to be exported as a function(s)
-
+/**
+ * Input: a string that represents method text
+ *
+ * Returns: an int of number of loops
+ */ 
 var whileLoops = new Array();
 var forLoops = new Array();
 var numberOfLoops = 0;
 
+// Define module to be exported as a function(s)
 module.exports = {
 	loopCounter: function(text) {
+		// splits the text by the keyword 'while('or 'for(' - there could be many other cases such as 'while (' but the code base follows a standard
+		// number of splits - 1 is the number of loops
 			var whileLoops = text.split('while(');
 				if (whileLoops == null) {
 				}

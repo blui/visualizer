@@ -1,3 +1,9 @@
+/**
+ * Input: a string that represents a full method name
+ *
+ * Returns: an array of separate words that makes up the method
+ */ 
+
 // Access modifiers: public, protected, and private
 // Modifier restricting to one instance: static
 // Modifier prohibiting value modification: final
@@ -11,6 +17,7 @@
 var modifiersNames = new Array();
 
 module.exports = {
+	// split text by " " 
 	methodModifiersExtract: function(text) {
 		modifiersNames = text.split(" ");
 		return modifiersNames;
