@@ -17,8 +17,13 @@
 				//Arrays for the planet rotation animations
 				var planetrotationspeeds = new Array();
 				
-				var sunTexture = THREE.ImageUtils.loadTexture('sunTexture.gif', new THREE.UVMapping(), function() {renderer.render(scene);});
-
+				//Textures for the suns, methods and variables
+				var sunTexturePrivate = THREE.ImageUtils.loadTexture('sunTexturePrivate.gif');
+				var sunTextureProtected = THREE.ImageUtils.loadTexture('sunTextureProtected.gif');
+				var sunTexturePublic = THREE.ImageUtils.loadTexture('sunTexturePublic.gif');
+				var methodTexture = THREE.ImageUtils.loadTexture('methodTexture.gif');
+				var variableTexture = THREE.ImageUtils.loadTexture('variableTexture.gif');
+				
 				var spacingbetweenplanets = 27;
 				var spacingbetweensolarsystems = 500;
 				
@@ -216,14 +221,38 @@
 					scene.add(light)
 				}
 				
-				function drawSpaceship ()
+				function drawSpaceship()
 				{
-					var spaceshipmaterial = new THREE.MeshBasicMaterial({ map: sunTexture});
-					var spaceshipgeometry = new THREE.SphereGeometry(10,30,30);
-					var spaceship = new THREE.Mesh(spaceshipgeometry, spaceshipmaterial);
-					spaceship.position.x = 20;
-					spaceship.position.y = 20;
-					scene.add(spaceship);
+					var spaceshipmaterial1 = new THREE.MeshPhongMaterial({ map: sunTexturePrivate, shininess: 12});
+					var spaceshipmaterial2 = new THREE.MeshPhongMaterial({ map: sunTextureProtected, shininess: 12});
+					var spaceshipmaterial3 = new THREE.MeshPhongMaterial({ map: sunTexturePublic, shininess: 12});
+					var spaceshipmaterial4 = new THREE.MeshPhongMaterial({ map: methodTexture, shininess: 12});
+					var spaceshipmaterial5 = new THREE.MeshPhongMaterial({ map: variableTexture, shininess: 12});
+					var spaceshipgeometry1 = new THREE.SphereGeometry(10,30,30);
+					var spaceshipgeometry2 = new THREE.SphereGeometry(10,30,30);
+					var spaceshipgeometry3 = new THREE.SphereGeometry(10,30,30);
+					var spaceshipgeometry4 = new THREE.SphereGeometry(10,30,30);
+					var spaceshipgeometry5 = new THREE.SphereGeometry(10,30,30);
+					var spaceship1 = new THREE.Mesh(spaceshipgeometry1, spaceshipmaterial1);
+					var spaceship2 = new THREE.Mesh(spaceshipgeometry2, spaceshipmaterial2);
+					var spaceship3 = new THREE.Mesh(spaceshipgeometry3, spaceshipmaterial3);
+					var spaceship4 = new THREE.Mesh(spaceshipgeometry4, spaceshipmaterial4);
+					var spaceship5 = new THREE.Mesh(spaceshipgeometry5, spaceshipmaterial5);
+					spaceship1.position.x = 20;
+					spaceship1.position.y = 150;
+					spaceship2.position.x = 50;
+					spaceship2.position.y = 150;
+					spaceship3.position.x = 80;
+					spaceship3.position.y = 150;
+					spaceship4.position.x = 110;
+					spaceship4.position.y = 150;
+					spaceship5.position.x = 140;
+					spaceship5.position.y = 150;
+					scene.add(spaceship1);
+					scene.add(spaceship2);
+					scene.add(spaceship3);
+					scene.add(spaceship4);
+					scene.add(spaceship5);
 				}
 				
 				//Draw a sun at a specific location with a specific size and colour
