@@ -7,9 +7,6 @@
 	"dependencies": {
 		"express": "x",
 		"wrench": "x",
-		"jade": "x",
-		"stylus": "x",
-		"nib": "x",
 		"util": "x"
 	}
 }

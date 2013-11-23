@@ -16,13 +16,14 @@ var express = require('express');
 /*
  * Define module dependencies created by us
  */
-var reader = require('./dirAndFileReader.js');
-var parser = require('./parser.js');
+var reader = require('./reader_logic/dirAndFileReader.js');
+var parser = require('./parser_logic/parser.js');
 
 /* 
  * Instantiate the application
  */
 var app = express();
+
 
 // ------------------- dirAndFileReader logic ------------------------
 
@@ -36,19 +37,13 @@ app.get('/reader', function(req, res) {
 	res.send(filesReaded);
 });
 
-var singleFile = filesReaded[4];
-console.log(singleFile.toString());
-//console.log('Indicator1: ' + typeof singleFile);
-var parsedFile = parser.parser(singleFile);
-//console.log('Indicator2: ' + typeof parsedFile);
-console.log(parsedFile);
 
 // ------------------- parser logic ----------------------------------
 
 // Create: - arrayAllParsed: array to store contents of all parsed files 
 // 		   - singleParsed: temp. place-holder for single file's parsed output
 //         - singleFile: temp. place-holder for singleFile's content
-/* var arrayAllParsed = new Array(),
+var arrayAllParsed = new Array(),
 	singleParsed,
 	singleFile;
 // Use a loop to traverse through an array of file contents to parse
@@ -62,12 +57,23 @@ for(var i = 0; i < filesReaded.length; i++) {
 	arrayAllParsed.push(singleParsed);
 	// De-bugging purposes to indicate files are actually being parsed
 	console.log('File #: ' + i + ' parsed.');
-} */
+}
 
-/* // Define a new route for app for displaying reader results
+// Define a new route for app for displaying reader results
 app.get('/parser', function(req, res) {
-	res.send(parsedFile);;
-}); */
+	res.send(arrayAllParsed);
+});
+
+
+// ------------------- export .json file ------------------------------
+// Create: - .json file physically on local directory
+function createFile() {
+	var fileOutput = new ActiveXObject("Scripting.FileSystemObject");
+	var s = fso.CreateTextFile("parsedData.json", true);
+	s.WriteLine(arrayAllParsed.toString());
+	console.log('File created');
+	s.Close();
+}
 
 // Bind and listen to connections
 app.listen(3000);
