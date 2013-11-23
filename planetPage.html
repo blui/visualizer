@@ -223,43 +223,13 @@
 				
 				function drawSpaceship()
 				{
-					var spaceshipmaterial1 = new THREE.MeshPhongMaterial({ map: sunTexturePrivate, shininess: 12});
-					var spaceshipmaterial2 = new THREE.MeshPhongMaterial({ map: sunTextureProtected, shininess: 12});
-					var spaceshipmaterial3 = new THREE.MeshPhongMaterial({ map: sunTexturePublic, shininess: 12});
-					var spaceshipmaterial4 = new THREE.MeshPhongMaterial({ map: methodTexture, shininess: 12});
-					var spaceshipmaterial5 = new THREE.MeshPhongMaterial({ map: variableTexture, shininess: 12});
-					var spaceshipgeometry1 = new THREE.SphereGeometry(10,30,30);
-					var spaceshipgeometry2 = new THREE.SphereGeometry(10,30,30);
-					var spaceshipgeometry3 = new THREE.SphereGeometry(10,30,30);
-					var spaceshipgeometry4 = new THREE.SphereGeometry(10,30,30);
-					var spaceshipgeometry5 = new THREE.SphereGeometry(10,30,30);
-					var spaceship1 = new THREE.Mesh(spaceshipgeometry1, spaceshipmaterial1);
-					var spaceship2 = new THREE.Mesh(spaceshipgeometry2, spaceshipmaterial2);
-					var spaceship3 = new THREE.Mesh(spaceshipgeometry3, spaceshipmaterial3);
-					var spaceship4 = new THREE.Mesh(spaceshipgeometry4, spaceshipmaterial4);
-					var spaceship5 = new THREE.Mesh(spaceshipgeometry5, spaceshipmaterial5);
-					spaceship1.position.x = 20;
-					spaceship1.position.y = 150;
-					spaceship2.position.x = 50;
-					spaceship2.position.y = 150;
-					spaceship3.position.x = 80;
-					spaceship3.position.y = 150;
-					spaceship4.position.x = 110;
-					spaceship4.position.y = 150;
-					spaceship5.position.x = 140;
-					spaceship5.position.y = 150;
-					scene.add(spaceship1);
-					scene.add(spaceship2);
-					scene.add(spaceship3);
-					scene.add(spaceship4);
-					scene.add(spaceship5);
 				}
 				
 				//Draw a sun at a specific location with a specific size and colour
-				function drawSun(sunyposition, sunsize, suncolour)
+				function drawSun(sunyposition, sunsize, texture)
 				{
 					var sungeometry = new THREE.SphereGeometry(sunsize,30,30);
-					var sunmaterial = new THREE.MeshPhongMaterial({color:suncolour, shininess: 12, specular: 0xdedeb2});
+					var sunmaterial = new THREE.MeshPhongMaterial({map: texture, shininess: 12});
 					var sun = new THREE.Mesh(sungeometry, sunmaterial);
 					sun.geometry.dynamic = true;
 					sun.position.y = -sunyposition;
@@ -268,11 +238,10 @@
 				}
 				
 				//Draw a planet for a given sun with a specific position, size, colour, orbit speed and rotation speed
-				function drawPlanet(planetxposition, sunyposition, planetsize, planetcolour, orbitspeed, rotationspeed)
+				function drawPlanet(planetxposition, sunyposition, planetsize, texture, orbitspeed, rotationspeed)
 				{
-					var planetgeometry = new THREE.SphereGeometry(planetsize,10,10);
-					var planetmaterial = new THREE.MeshPhongMaterial();
-					planetmaterial.color.copy(new THREE.Color(planetcolour));
+					var planetgeometry = new THREE.SphereGeometry(planetsize,30,30);
+					var planetmaterial = new THREE.MeshPhongMaterial({map: texture, shininess: 12});
 					var planet = new THREE.Mesh(planetgeometry, planetmaterial);
 					planet.geometry.dynamic = true;
 					planet.position.x = planetxposition;
@@ -350,18 +319,15 @@
 				{
 					if (classtype == "public")
 					{	
-						var colour = 0xFFFFFF;
-						return colour;
+						return sunTexturePublic;
 					}
 					else if (classtype == "protected")
 					{
-						var colour = 0xFFFF00;
-						return colour;
+						return sunTextureProtected;
 					}
 					else
 					{
-						var colour = 0xFF4500;
-						return colour;
+						return sunTexturePrivate;
 					}
 				}
 				
@@ -391,13 +357,11 @@
 				{
 					if (type == "method")
 					{	
-						var colour = 0x006400;
-						return colour;
+						return methodTexture;
 					}
 					else
 					{
-						var colour = 0x800080;
-						return colour;
+						return variableTexture;
 					}
 				}
 				
