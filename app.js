@@ -1,16 +1,23 @@
 
 /**
- * app runs all modules supported
+ * app runs all modules supported; integration of directory/file reader
+ * and parser. User runs app.js from terminal using the command 'node
+ * app.js'.
+ *
+ * returns a local-hosted server based webpage allowing user to view
+ * results of read files and parsed data.
+ *
+ * creates a parsedData.json file that contains a stringified version
+ * of parsed data for visualization to use
  *
  * Authors: Brian Lui, Tommy Chien
  *
- * When run, app is able to integrate dirAndFileReader and parser
- * modules together to produce files that are scanned, then parsed
  */
  
 /*
  * Define module dependencies (node/npm)
  */
+var fs = require('fs');
 var express = require('express');
 
 /*
@@ -67,13 +74,13 @@ app.get('/parser', function(req, res) {
 
 // ------------------- export .json file ------------------------------
 // Create: - .json file physically on local directory
-function createFile() {
-	var fileOutput = new ActiveXObject("Scripting.FileSystemObject");
-	var s = fso.CreateTextFile("parsedData.json", true);
-	s.WriteLine(arrayAllParsed.toString());
-	console.log('File created');
-	s.Close();
-}
+fs.writeFile('./parsedData.json', arrayAllParsed.toString(), function(err) {
+	if(err) {
+        console.log(err);
+    } else {
+        console.log("The file was saved!");
+    }
+}); 
 
 // Bind and listen to connections
 app.listen(3000);

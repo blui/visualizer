@@ -2,13 +2,14 @@
 /**
  * dirAndFileReade module exported.
  *
- * Authors: Brian Lui, Miki Gataric
- *
  * Returns 2 functions; dirRead and fileRead
  * 	dirRead: Given a parameter rootfolder, returns an array of files filtered (.java)
  *	         within rootfolder formatted with full paths.
  *	fileRead: Given a formatted path of files, returns an array of file contents
  *			  formatted as strings of text
+ *
+ * Authors: Brian Lui, Miki Gataric
+ *
  */
  
 /*
@@ -26,7 +27,8 @@ var fs = require('fs'),
 		files = new Array(),
 		fileextension = '.java',
 		contents = new Array();
-		index = 0;
+
+// ------------------- dirRead and fileRead function logic ------------------------
 
 /* 
  * Define functions to be exported as a module
