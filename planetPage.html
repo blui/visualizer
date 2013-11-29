@@ -240,7 +240,7 @@
 					spaceship = new THREE.Mesh(spaceshipgeometry, spaceshipmaterial);
 					spaceship.position.z = 50;
 					spaceship.position.y = -10;
-					scene.add(ring)
+					scene.add(ring);
 					scene.add(spaceship);
 				}
 				
@@ -405,11 +405,21 @@
 					return speed;		
 				}
 				
-				//Function to determine an orbit speed for each planet
-				function generateRandomRotationSpeed()
+				//Function to determine a rotation direction for each planet
+				function determinePlanetRotation(type)
 				{
-					var speed = ((Math.random()*0.06)+0.01);
-					return speed;		
+					if (type == "public")
+					{
+						return 0.3;
+					}
+					else if (type == "private")
+					{
+						return (-0.3);
+					}
+					else
+					{
+						return 0;
+					}	
 				}
 				
 				//Make a sun for a class
@@ -423,7 +433,7 @@
 				{
 					for (var i = 0;i < classname.length; i++)
 					{
-					drawPlanet(spacingbetweenplanets+(i*spacingbetweenplanets), sunloc, determinePlanetSize(classname[i][1]), determinePlanetColour(classname[i][2]), generateRandomOrbitSpeed(), generateRandomRotationSpeed());
+					drawPlanet(spacingbetweenplanets+(i*spacingbetweenplanets), sunloc, determinePlanetSize(classname[i][1]), determinePlanetColour(classname[i][2]), generateRandomOrbitSpeed(), determinePlanetRotation(classname[i][3]));
 					}
 				}
 					
@@ -569,7 +579,7 @@
 				animate();
 								
 				//Draw a star
-				//drawStar(16.5, 0);
+				drawStar(16.5, 0);
 				makeSolarSystems();	
 				
 				drawSpaceship();
