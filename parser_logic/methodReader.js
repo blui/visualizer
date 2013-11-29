@@ -22,7 +22,7 @@ var methodName = ''; // method name - one word, not full name with public static
 var variableName = '';	// variable name		
 var variableConstructor =''; // variable constructor eg int, string, boolean
 var sposM = 0; // starting position of method name
-var eposM = 0; // ending positino of method name
+var eposM = 0; // ending position of method name
 var index = 0; //index of current position
 var modifiers = new Array(); // method modifiers array - holds each separate word of full method name
 var modifiersV = new Array(); // variable modifiers array - holds each separate word of full variable name
@@ -35,6 +35,7 @@ module.exports = {
 	methodReader: function(text, i) {
 		//clear the array to new method
 		methodArray = new Array();
+		variableArray = new Array();
 		index = i;
 		//finds all the public methods or variables first
 		while(text.indexOf('public', index) != -1){

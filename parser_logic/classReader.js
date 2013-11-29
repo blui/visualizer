@@ -8,46 +8,54 @@
 // Declare module dependencies
 var methodReader = require('./methodReader.js')  
 var classParentExtract = require('./classParentExtract.js')
+var classPackage = require('./classPackage.js')
 var classInterfaceExtract = require('./classInterfaceExtract.js')
 var lineCounter = require('./lineCounter.js')
 var loopCounter = require('./loopCounter.js')
 var classModifiersExtract = require('./classModifiersExtract.js')
 
-// Variables Initiations
-var sposC = 0; //start position for class
-var eposC = 0; //end position for class
-var sposA = 0; //start position for class
-var eposA = 0; //end position for class
-var classArray = new Array(); // the array that's being returned
-var className = ''; // name of class
-var parent = ''; // name of parent if it exists
-var interfaceNames = new Array(); // name of interface(s) if they exists
-var numberOfLines = 0; // number of lines for class
-var numberOfLoops = 0; // number of loops for class
-var modifiers = new Array(); // modifiers in an array if they exists eg: public, abstract
-var methodArray = new Array(); // array of method and its information
-var variableArray = new Array(); // array of variable and its information
-var authorName = ''; // author(s) name of class it commented
 
-var classEnd = 0; // used to mark end of class index
-var tempA = new Array(); // temp array used
-var tempString = '';  // temp string used
-var tempString2 = '';  // temp string used
-var tempString3 = ''; // tempstring used
-
-var tempInt = 0; // temp number used
-var tempInt2 = 0; // temp number used
-var tempInt3 = 0; // temp number used
-var tempInt4 = 0; // temp number used
-var authorNames = new Array(); // array of author names
 
 // Define module to be exported as a function
 module.exports = {
 	classReader: function(text, index) {
+	// Variables Initiations
+	var sposC = 0; //start position for class
+	var eposC = 0; //end position for class
+	var sposA = 0; //start position for class authors
+	var eposA = 0; //end position for class authors
+	var sposI = 0; //start position for class imports
+	var eposI = 0; //end position for class imports
+	var classArray = new Array(); // the array that's being returned
+	var className = ''; // name of class
+	var parent = ''; // name of parent if it exists
+	var packageName =''; // name of package
+	var interfaceNames = new Array(); // name of interface(s) if they exists
+	var numberOfLines = 0; // number of lines for class
+	var numberOfLoops = 0; // number of loops for class
+	var modifiers = new Array(); // modifiers in an array if they exists eg: public, abstract
+	var methodArray = new Array(); // array of method and its information
+	var variableArray = new Array(); // array of variable and its information
+	var authorName = ''; // author(s) name of class it commented
+	var authorNames = new Array(); // array of author names
+
+	var libName = ''; // libraries names
+	var imports = new Array(); // imported libraries 
+	var classEnd = 0; // used to mark end of class index
+	var tempA = new Array(); // temp array used
+	var tempB = new Array(); // temp array used
+	var tempString = '';  // temp string used
+	var tempString2 = '';  // temp string used
+	var tempString3 = ''; // tempstring used
+
+	var tempInt = 0; // temp number used
+	var tempInt2 = 0; // temp number used
+	var tempInt3 = 0; // temp number used
+	var tempInt4 = 0; // temp number used
 			
 			// checks java file to make sure it's a class
 			if(text.indexOf('class') != -1){
-				
+				authorNames = new Array();
 				// searches for author in class files, it's denoted by @author: in the comments by the developers
 				while(text.indexOf('author', eposA) != -1){
 						sposA = text.indexOf('author', eposA);
@@ -61,10 +69,8 @@ module.exports = {
 				}
 				
 				// this loop removes the comments from the code to not interfere with the rest of the parsing
-				// also this gives a more acurate line and loop count
-				var j = 0;
-				
-				// searches for the beginings of comments
+				// also this gives a more accurate line and loop count				
+				// searches for the beginnings of comments
 				while (text.match('//*') || text.match('//')) {
 					// if match found - record the start and end positions
 					if (text.match('//*')) { 
@@ -78,7 +84,23 @@ module.exports = {
 					tempString3 = text.substring(sposC, eposC);
 					text = text.replace(tempString3, '');		
 				}
+				// package name of class
+				if(text.indexOf('package') != -1){
+				packageName = classPackage.classPackage(text);
+				}
 				
+				imports = new Array();
+				// searches for author in class files, it's denoted by @author: in the comments by the developers
+				while(text.indexOf('import', eposI) != -1){
+						sposI = text.indexOf('import', eposI);
+						eposI = sposI + 50;				
+						libName = text.substring(sposI+7, eposI);
+						tempB = new Array();
+						tempB = libName.split(/\r\n|\r|\n/);
+						libName = tempB[0];
+						imports.push(libName);
+						eposI = sposI + 8;
+				}				
 				//counts the number of lines and loops of code without the comments
 				numberOfLines = lineCounter.lineCounter(text);
 				numberOfLoops = loopCounter.loopCounter(text);
@@ -142,7 +164,7 @@ module.exports = {
 				// finds the index of class then add one to find the index of the class name 
 				// eg public abstract class className, index of class is 3, className is 4
 				className = modifiers[modifiers.indexOf('class')+1];
-				
+				className = className.trim();
 				// find the length of the array containing each word of full class name
 				// remove the elements at class and beyond, we only want modifiers in front of class 
 				// eg. public static abstract final class className extends parent implement inferface -> public static abstract final
@@ -155,6 +177,8 @@ module.exports = {
 				classArray.push(className);
 				classArray.push(parent);		
 				classArray.push(interfaceNames);
+				classArray.push(packageName);
+				classArray.push(imports);
 				classArray.push(numberOfLines);
 				classArray.push(numberOfLoops);
 				classArray.push(modifiers);
