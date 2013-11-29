@@ -14,8 +14,10 @@
 				var starsradii = new Array(), starscentres  = new Array();
 				//Arrays for the planet orbiting animations
 				var planetradii = new Array(), planetcentres = new Array(), planetorbitspeeds = new Array();
-				//Arrays for the planet rotation animations
+				//Arrays for the planet rotation speed
 				var planetrotationspeeds = new Array();
+				//Array for the sun rotation speed
+				var sunrotationspeeds = new Array();
 				
 				//Textures for the spaceship, suns, methods and variables
 				var sunTexturePrivate = THREE.ImageUtils.loadTexture('./textures/sunTexturePrivate.gif');
@@ -243,7 +245,7 @@
 				}
 				
 				//Draw a sun at a specific location with a specific size and colour
-				function drawSun(sunyposition, sunsize, texture)
+				function drawSun(sunyposition, sunsize, texture, rotationspeed)
 				{
 					var sungeometry = new THREE.SphereGeometry(sunsize,30,30);
 					var sunmaterial = new THREE.MeshPhongMaterial({map: texture, shininess: 12});
@@ -251,6 +253,7 @@
 					sun.geometry.dynamic = true;
 					sun.position.y = -sunyposition;
 					suns.push(sun);
+					sunrotationspeeds.push(rotationspeed);
 					scene.add(sun);		
 				}
 				
@@ -348,6 +351,19 @@
 					}
 				}
 				
+				//Function to determine the rotation speed of the sun
+				function determineSunRotationSpeed(numberofloops)
+				{
+					if (numberofloops == 0)
+					{
+						return 0;
+					}
+					else if (numberofloops > 0)
+					{
+						return 0.3;
+					}
+				}
+				
 				//Function to determine planet size
 				function determinePlanetSize(numberoflines)
 				{
@@ -399,7 +415,7 @@
 				//Make a sun for a class
 				function createSunForClass(classname, sunloc)
 				{
-					drawSun(sunloc, determineSunSize(classname[1]), determineSunColour(classname[2]));				
+					drawSun(sunloc, determineSunSize(classname[1]), determineSunColour(classname[2]), determineSunRotationSpeed(classname[3]));				
 				}
 				
 				//Make planets for a class
@@ -478,6 +494,15 @@
 				}, false);
 				}
 				
+				//Function to make the suns spin on their axis
+				function rotateAnimationSun()
+				{
+					for (var i = 0; i< suns.length; i++)
+					{
+						suns[i].rotation.y += sunrotationspeeds[i];
+					}
+				}
+				
 				//Function to make the planets spin on their axis
 				function rotateAnimation()
 				{
@@ -513,6 +538,7 @@
 				function animate()
 				{
 					requestAnimationFrame(animate);
+					rotateAnimationSun();
 					rotateAnimation();
 					planetOrbitAnimation();
 					starOrbitAnimation();
